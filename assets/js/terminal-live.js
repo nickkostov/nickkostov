@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
     pre.replaceWith(container);
 
     for (let line of lines) {
-      await typeLine(container, `$ ${line.trim()}`);
+      const cleanLine = line.trim();
+      const commandText = cleanLine.startsWith("$") ? cleanLine : `$ ${cleanLine}`;
+      await typeLine(container, commandText);
       await wait(400);
     }
   });
