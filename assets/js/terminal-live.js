@@ -1,31 +1,48 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const terminals = document.querySelectorAll(".terminal-body");
+  const inputBlocks = document.querySelectorAll('pre > code.language-terminal-input');
+  const outputBlocks = document.querySelectorAll('pre > code.language-terminal-output');
 
-  terminals.forEach(async (term) => {
-    const commands = term.dataset.lines.split("&&");
-    const output = term.dataset.output;
+  inputBlocks.forEach(async (codeBlock) => {
+    const pre = codeBlock.parentElement;
+    const lines = codeBlock.innerText.trim().split("\n");
 
-    for (let cmd of commands) {
-      await typeLine(term, `$ ${cmd.trim()}`);
-      await new Promise((res) => setTimeout(res, 500));
-    }
+    const container = document.createElement("div");
+    container.classList.add("terminal-box");
 
-    if (output) {
-      await typeLine(term, output, false);
+    pre.replaceWith(container);
+
+    for (let line of lines) {
+      await typeLine(container, `$ ${line.trim()}`);
+      await wait(400);
     }
   });
 
-  function typeLine(container, text, withPrompt = true) {
+  outputBlocks.forEach((codeBlock) => {
+    const pre = codeBlock.parentElement;
+    const output = codeBlock.innerText.trim().split("\n");
+
+    const container = document.createElement("div");
+    container.classList.add("terminal-box");
+
+    output.forEach(line => {
+      const lineDiv = document.createElement("div");
+      lineDiv.classList.add("line");
+      lineDiv.textContent = line;
+      container.appendChild(lineDiv);
+    });
+
+    pre.replaceWith(container);
+  });
+
+  function typeLine(container, text) {
     return new Promise((resolve) => {
       const line = document.createElement("div");
       line.classList.add("line");
 
-      if (withPrompt) {
-        const prompt = document.createElement("span");
-        prompt.classList.add("prompt");
-        prompt.textContent = "$ ";
-        line.appendChild(prompt);
-      }
+      const prompt = document.createElement("span");
+      prompt.classList.add("prompt");
+      prompt.textContent = "$ ";
+      line.appendChild(prompt);
 
       const cursor = document.createElement("span");
       cursor.classList.add("blinking-cursor");
@@ -43,7 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
           cursor.remove();
           resolve();
         }
-      }, 30);
+      }, 25);
     });
+  }
+
+  function wait(ms) {
+    return new Promise((res) => setTimeout(res, ms));
   }
 });
