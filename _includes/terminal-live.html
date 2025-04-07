@@ -1,10 +1,8 @@
-
-<div class="terminal-live-block">
-    <div class="terminal" data-lines="{{ include.lines | strip_newlines | replace: '\n', '||' }}"></div>
-    {% if include.output %}
-      <div class="terminal-output">
-        <pre>{{ include.output }}</pre>
+<div class="terminal-live">
+    {% assign commands = include.lines | split: '\n' %}
+    <div class="terminal-box">
+      <div class="terminal-body" data-lines='{{ include.lines | strip_newlines | replace: "'", "&apos;" }}' data-output='{{ include.output | strip_newlines | replace: "'", "&apos;" }}'>
       </div>
-    {% endif %}
+    </div>
   </div>
   

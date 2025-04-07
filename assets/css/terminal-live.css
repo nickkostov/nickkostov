@@ -1,35 +1,30 @@
-.terminal {
-    background-color: #00110f;
-    border: 1px solid #004400;
-    padding: 20px;
-    margin-bottom: 1rem;
-    border-radius: 5px;
+.terminal-box {
+    background-color: #000;
     color: #33ff33;
     font-family: monospace;
-    box-shadow: 0 0 10px #003300;
-    white-space: pre-wrap;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+    box-shadow: 0 0 10px #0f0;
+    margin-bottom: 2rem;
   }
-  .line {
-    white-space: pre;
+  
+  .prompt {
+    color: #0f0;
   }
+  
   .blinking-cursor {
     display: inline-block;
-    width: 8px;
+    width: 10px;
     height: 1em;
     background-color: #33ff33;
-    animation: blink 1s step-start infinite;
     margin-left: 4px;
+    animation: blink 1s step-start infinite;
   }
+  
   @keyframes blink {
     50% {
       opacity: 0;
     }
-  }
-  .terminal-output {
-    background-color: #0a0a0a;
-    color: #66ff66;
-    padding: 10px 20px;
-    border-left: 3px solid #00ff00;
-    font-family: monospace;
   }
   
