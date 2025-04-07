@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Интерактивна Конзола</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #33ff33;
+      font-family: monospace;
+      padding: 20px;
+    }
+    #terminal {
+      border: 1px solid #444;
+      padding: 20px;
+      background-color: #000;
+      max-width: 800px;
+      margin: auto;
+      height: 400px;
+      overflow-y: auto;
+    }
+    .line {
+      display: block;
+    }
+    #input-line {
+      outline: none;
+      border: none;
+      background: transparent;
+      color: #33ff33;
+      font: inherit;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal">
+    <div class="line">Добре дошъл в симулирана конзола!</div>
+    <div class="line"><span>$</span> <input id="input-line" autofocus /></div>
+  </div>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const inputLine = document.getElementById('input-line');
+
+    const responses = {
+      help: "Команди: help, echo [текст], clear",
+      clear: "clear",
+    };
+
+    function writeOutput(output) {
+      const line = document.createElement('div');
+      line.classList.add('line');
+      line.textContent = output;
+      terminal.insertBefore(line, inputLine.parentElement);
+    }
+
+    inputLine.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        const input = inputLine.value.trim();
+        writeOutput('$ ' + input);
+
+        if (input === "clear") {
+          terminal.innerHTML = '<div class="line"><span>$</span> <input id="input-line" autofocus /></div>';
+          document.getElementById('input-line').focus();
+          return;
+        }
+
+        if (input.startsWith("echo ")) {
+          const text = input.slice(5);
+          writeOutput(text);
+        } else if (responses[input]) {
+          writeOutput(responses[input]);
+        } else if (input !== "") {
+          writeOutput("Непозната команда: " + input);
+        }
+
+        inputLine.value = "";
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>

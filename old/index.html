@@ -1,34 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Анимиран Code Block</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #33ff33;
+      font-family: monospace;
+      padding: 20px;
+    }
+
+    .terminal {
+      background-color: #000;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    .line {
+      white-space: pre;
+    }
+
+    .prompt::before {
+      content: "$ ";
+      color: #0f0;
+    }
+
+    .blinking-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background-color: #33ff33;
+      animation: blink 1s step-start infinite;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="crawl">
-    In a galaxy far, far away... (Sofia Bulgaria)
-    <br>
-    They named me Nikolay Kostov
-    <br>
-    There is no hope
-    <br>
-    I work as a DevOps and Prod needs to be up
-  </div>
-  <div id="scroller">
-    <div id="content">
-      <div id="title">Nikolay Kostov: The Fight For Production</div>
-      <p>
-        It will be an absolute trick
-      </p>
-      <p>
-        It will be an absolute trick
-      </p>
-      <address>
-  Infinite Loop,<br>
-  Cupertino, CA<br>
-  95014, USA
-      </address>
-      <div id="subtitle">Nikolay Kostov</div>
-    </div>
-  </div>
+  <div class="terminal" id="terminal"></div>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+
+    const commands = [
+      "echo 'Здравей, свят!'",
+      "npm install jekyll",
+      "jekyll new my-site",
+      "cd my-site",
+      "bundle exec jekyll serve"
+    ];
+
+    let delay = 1000;
+
+    function typeLine(lineText, isCommand = true) {
+      return new Promise(resolve => {
+        const line = document.createElement("div");
+        line.classList.add("line");
+        if (isCommand) line.classList.add("prompt");
+
+        terminal.appendChild(line);
+
+        let i = 0;
+
+        const cursor = document.createElement("span");
+        cursor.classList.add("blinking-cursor");
+        line.appendChild(cursor);
+
+        const interval = setInterval(() => {
+          if (i < lineText.length) {
+            cursor.insertAdjacentText("beforebegin", lineText.charAt(i));
+            i++;
+          } else {
+            clearInterval(interval);
+            cursor.remove();
+            resolve();
+          }
+        }, 50);
+      });
+    }
+
+    async function runTerminal() {
+      for (const command of commands) {
+        await typeLine(command);
+        await new Promise(res => setTimeout(res, delay));
+      }
+    }
+
+    runTerminal();
+  </script>
 </body>
 </html>
