@@ -31,3 +31,20 @@
     opacity: 0;
   }
 }
+
+.terminal-play {
+  background-color: #33ff33;
+  color: #000;
+  border: none;
+  font-family: monospace;
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background 0.3s ease;
+}
+
+.terminal-play:hover {
+  background-color: #2ecc71;
+}

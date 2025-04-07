@@ -2,21 +2,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputBlocks = document.querySelectorAll('pre > code.language-terminal-input');
   const outputBlocks = document.querySelectorAll('pre > code.language-terminal-output');
 
-  inputBlocks.forEach(async (codeBlock) => {
+  inputBlocks.forEach((codeBlock, index) => {
     const pre = codeBlock.parentElement;
     const lines = codeBlock.innerText.trim().split("\n");
-
     const container = document.createElement("div");
     container.classList.add("terminal-box");
 
+    const playBtn = document.createElement("button");
+    playBtn.classList.add("terminal-play");
+    playBtn.textContent = "▶ Play";
+    container.appendChild(playBtn);
+
+    const terminalBody = document.createElement("div");
+    terminalBody.classList.add("terminal-body");
+    terminalBody.dataset.lines = JSON.stringify(lines);
+    container.appendChild(terminalBody);
+
     pre.replaceWith(container);
 
-    for (let line of lines) {
-      const cleanLine = line.trim();
-      const commandText = cleanLine.startsWith("$") ? cleanLine : `$ ${cleanLine}`;
-      await typeLine(container, commandText);
-      await wait(400);
-    }
+    playBtn.addEventListener("click", async () => {
+      playBtn.remove();
+      for (let line of lines) {
+        const clean = line.trim();
+        const commandText = clean.startsWith("$") ? clean : `$ ${clean}`;
+        await typeLine(terminalBody, commandText);
+        await wait(400);
+      }
+    });
   });
 
   outputBlocks.forEach((codeBlock) => {
@@ -26,13 +38,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.createElement("div");
     container.classList.add("terminal-box");
 
+    const terminalBody = document.createElement("div");
+    terminalBody.classList.add("terminal-body");
+
     output.forEach(line => {
       const lineDiv = document.createElement("div");
       lineDiv.classList.add("line");
       lineDiv.textContent = line;
-      container.appendChild(lineDiv);
+      terminalBody.appendChild(lineDiv);
     });
 
+    container.appendChild(terminalBody);
     pre.replaceWith(container);
   });
 
