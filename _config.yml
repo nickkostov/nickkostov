@@ -3,6 +3,7 @@ markdown: kramdown
 url: ""
 baseurl: "/nickkostov"
 
+
 # for atom feed
 author:
   name: Nikolay Kostov

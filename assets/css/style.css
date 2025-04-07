@@ -1,0 +1,19 @@
+.terminal-block {
+    background: #1e1e1e;
+    color: #ccc;
+    padding: 1em;
+    border-radius: 8px;
+    font-family: monospace;
+    margin: 1em 0;
+  }
+.terminal-command {
+    color: #9cdcfe;
+}
+.terminal-output {
+    color: #d4d4d4;
+    margin-top: 0.5em;
+}
+.prompt {
+    color: #6a9955;
+    margin-right: 0.5em;
+}

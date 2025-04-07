@@ -1,3 +1,4 @@
+/* Основен контейнер за терминала */
 .terminal-box {
   background-color: #000;
   color: #33ff33;
@@ -5,18 +6,12 @@
   padding: 1rem;
   border-radius: 8px;
   border: 1px solid #444;
-  box-shadow: 0 0 10px #0f0;
+  box-shadow: 0 0 15px #0f0;
   margin-bottom: 2rem;
+  position: relative;
 }
 
-.prompt::before {
-  color: #0f0;
-}
-
-.line {
-  white-space: pre;
-}
-
+/* Анимиращ зелен курсор */
 .blinking-cursor {
   display: inline-block;
   width: 10px;
@@ -32,14 +27,45 @@
   }
 }
 
-.terminal-play {
-  background-color: #33ff33;
-  color: #000;
-  border: none;
+/* Ред в терминала */
+.line {
+  white-space: pre;
+}
+
+/* Преди prompt (ако решим някога да показваме) */
+.prompt::before {
+  color: #0f0;
+}
+
+/* Контейнер за бутоните */
+.terminal-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5em;
+  gap: 0.5em;
+}
+
+/* Стил за Play, Replay и Copy бутоните */
+.terminal-play,
+.terminal-copy {
+  flex: 1 1 0;
+  min-width: 100px;
+  text-align: center;
+  background: transparent;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 4px 8px;
   font-family: monospace;
-  font-weight: bold;
-  padding: 0.4rem 0.8rem;
   border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 1rem;
+  font-size: 0.9em;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Hover ефект */
+.terminal-play:hover,
+.terminal-copy:hover {
+  background: #00ff00;
+  color: #000;
 }

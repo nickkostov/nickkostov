@@ -3,6 +3,8 @@
 source "https://rubygems.org"
 
 gem "github-pages", group: :jekyll_plugins
+#gem "jekyll", "~> 4.3.2"
+
 
 gem "jekyll-paginate", "~> 1.1"
 
@@ -13,3 +15,11 @@ gem "jekyll-seo-tag", "~> 2.6"
 gem "jekyll-sitemap", "~> 1.4"
 
 gem "jekyll-feed", "~> 0.13.0"
+
+gem "csv"
+gem 'bigdecimal'
+gem 'racc'
+gem 'debug'
+gem 'nkf'
+gem 'rbs'
+gem 'syslog'

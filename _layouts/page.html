@@ -22,6 +22,7 @@
       <!-- page content -->
       <main class="content">
         <p class="title">
+        
           {{page.title}}
         </p>
         {{content}}
@@ -30,5 +31,7 @@
       <!-- footer -->
       {% include footer.html %}
     </div>
+    <link rel="stylesheet" href="{{ '/assets/css/terminal-live.css' | absolute_url }}">
+    <script src="{{ '/assets/js/terminal-live.js' | absolute_url }}"></script>  
   </body>
 </html>
