@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputBlocks = document.querySelectorAll('pre > code.language-terminal-input');
   const outputBlocks = document.querySelectorAll('pre > code.language-terminal-output');
 
-  inputBlocks.forEach((codeBlock, index) => {
+  inputBlocks.forEach((codeBlock) => {
     const pre = codeBlock.parentElement;
     const lines = codeBlock.innerText.trim().split("\n");
     const container = document.createElement("div");
@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     playBtn.addEventListener("click", async () => {
       playBtn.remove();
       for (let line of lines) {
-        const clean = line.trim();
-        const commandText = clean.startsWith("$") ? clean : `$ ${clean}`;
+        let clean = line.trim();
+        let commandText = /^[\$\>]\s/.test(clean) ? clean : `$ ${clean}`;
         await typeLine(terminalBody, commandText);
         await wait(400);
       }
