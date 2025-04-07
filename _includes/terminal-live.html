@@ -1,0 +1,9 @@
+<div class="terminal-live-block">
+    <div class="terminal" data-lines="{{ include.lines | strip_newlines | replace: '\n', '||' }}"></div>
+    {% if include.output %}
+      <div class="terminal-output">
+        <pre>{{ include.output }}</pre>
+      </div>
+    {% endif %}
+</div>
+  
