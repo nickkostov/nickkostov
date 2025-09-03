@@ -50,4 +50,32 @@
       window.open(url, "_blank");
     }
   </script>
+<!-- Mermaid -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  (function () {
+    const prefersDark = () =>
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'loose',
+      theme: prefersDark() ? 'dark' : 'default'
+    });
+
+    // Re-init + re-render if the OS theme changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)')
+        .addEventListener('change', () => {
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: prefersDark() ? 'dark' : 'default'
+          });
+          document.querySelectorAll('.mermaid').forEach(el => mermaid.init(undefined, el));
+        });
+    }
+  })();
+</script>
 </head>

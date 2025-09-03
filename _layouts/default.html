@@ -34,5 +34,35 @@
       <script src="{{ '/assets/js/terminal-live.js' | absolute_url }}"></script>    
 
     </div>
+<script>
+  (function () {
+    function renderDiagBlocks(root = document) {
+      // Works with kramdown + Rouge output
+      const blocks = root.querySelectorAll(
+        'pre > code.language-diag, pre > code.lang-diag, pre > code.diag'
+      );
+
+      blocks.forEach(code => {
+        const pre = code.parentElement;
+        const container = document.createElement('div');
+        container.className = 'mermaid';
+        container.textContent = code.textContent.trim();
+        pre.replaceWith(container);
+      });
+
+      mermaid.run({ querySelector: '.mermaid' });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => renderDiagBlocks(document));
+    } else {
+      renderDiagBlocks(document);
+    }
+
+    // If you add PJAX/Turbo later, call window.__renderDiagBlocks(newContent)
+    window.__renderDiagBlocks = renderDiagBlocks;
+  })();
+</script>
+
   </body>
 </html>
