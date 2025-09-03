@@ -36,21 +36,44 @@
     </div>
 <script>
   (function () {
-    function renderDiagBlocks(root = document) {
-      // Works with kramdown + Rouge output
-      const blocks = root.querySelectorAll(
-        'pre > code.language-diag, pre > code.lang-diag, pre > code.diag'
-      );
+    function findDiagBlocks(root) {
+      const hits = [];
+      // Case 1: Plain kramdown/rouge output
+      root.querySelectorAll('pre > code.language-diag, pre > code.lang-diag, pre > code.diag')
+          .forEach(code => hits.push({ code, wrapper: code.closest('pre') }));
 
-      blocks.forEach(code => {
-        const pre = code.parentElement;
+      // Case 2: Rouge wrapper blocks
+      root.querySelectorAll('div[class*="language-diag"].highlighter-rouge pre > code')
+          .forEach(code => hits.push({
+            code,
+            wrapper: code.closest('div.highlighter-rouge') || code.closest('pre')
+          }));
+
+      return hits;
+    }
+
+    function renderDiagBlocks(root = document) {
+      const blocks = findDiagBlocks(root);
+      console.log(`[diag] found ${blocks.length} block(s).`);
+
+      blocks.forEach(({ code, wrapper }) => {
         const container = document.createElement('div');
         container.className = 'mermaid';
         container.textContent = code.textContent.trim();
-        pre.replaceWith(container);
+        (wrapper || code.closest('pre')).replaceWith(container);
       });
 
-      mermaid.run({ querySelector: '.mermaid' });
+      if (!window.mermaid) {
+        console.warn('[diag] Mermaid not loaded. Did you add the <script> in head.html?');
+        return;
+      }
+
+      try {
+        mermaid.run({ querySelector: '.mermaid' });
+        console.log('[diag] rendered mermaid diagrams.');
+      } catch (e) {
+        console.error('[diag] mermaid.run failed:', e);
+      }
     }
 
     if (document.readyState === 'loading') {
@@ -59,10 +82,11 @@
       renderDiagBlocks(document);
     }
 
-    // If you add PJAX/Turbo later, call window.__renderDiagBlocks(newContent)
+    // Expose for SPA hooks if you add PJAX/Turbo later
     window.__renderDiagBlocks = renderDiagBlocks;
   })();
 </script>
+
 
   </body>
 </html>
