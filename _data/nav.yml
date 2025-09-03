@@ -3,6 +3,8 @@ list:
     url: ""
   - title: About
     url: about
+  - title: Terminal Live Examples
+    url: terminal-live-examples
   - title: Feed
     url: feed.xml
     target: "_blank"
