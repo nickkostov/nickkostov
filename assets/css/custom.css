@@ -107,3 +107,13 @@ footer {
 	}
 }
 .mermaid { overflow: auto; margin: 1rem 0; }
+
+/* Anime.js clock */
+#anime-clock { display: flex; justify-content: center; margin: 1rem 0 2rem; }
+#anime-clock .clock { position: relative; width: 200px; height: 200px; border: 4px solid var(--theme-color); border-radius: 50%; background: transparent; }
+#anime-clock .mark { position: absolute; left: 50%; top: 50%; width: 2px; height: 8px; background: var(--theme-color); transform-origin: center -92px; opacity: 0.5; }
+#anime-clock .hand { position: absolute; left: 50%; bottom: 50%; transform: translateX(-50%) rotate(0deg); transform-origin: bottom center; background: var(--theme-color); border-radius: 2px; }
+#anime-clock .hand.hour { width: 4px; height: 56px; }
+#anime-clock .hand.minute { width: 3px; height: 76px; }
+#anime-clock .hand.second { width: 2px; height: 86px; background: #e74c3c; }
+#anime-clock .center-dot { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; background: var(--theme-color); border-radius: 50%; transform: translate(-50%, -50%); }

@@ -25,6 +25,15 @@ pill("#page", {
     } catch (e) {
       console.error('[site] diagram re-render failed:', e);
     }
+
+    // Initialize anime.js clock if present on page
+    try {
+      if (window.__initAnimeClock) {
+        window.__initAnimeClock();
+      }
+    } catch (e) {
+      console.error('[site] anime clock init failed:', e);
+    }
   }
 });
 
