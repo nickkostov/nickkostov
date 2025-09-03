@@ -17,6 +17,14 @@ pill("#page", {
       removeClass(indicator, "is-loading");
       indicator.style.display = "none";
     }, 500);
+    // Re-render Mermaid diagrams after PJAX navigation
+    try {
+      if (window.__renderDiagBlocks) {
+        window.__renderDiagBlocks(document);
+      }
+    } catch (e) {
+      console.error('[site] diagram re-render failed:', e);
+    }
   }
 });
 
