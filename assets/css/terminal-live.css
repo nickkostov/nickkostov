@@ -32,8 +32,13 @@
   white-space: pre;
 }
 
-/* Преди prompt (ако решим някога да показваме) */
+/* Prompt styling */
+.prompt {
+  color: #33ff33;
+}
+
 .prompt::before {
+  content: attr(data-prompt) " ";
   color: #0f0;
 }
 

@@ -6,6 +6,13 @@ function initTerminalBlocks() {
   inputBlocks.forEach((codeBlock) => {
     const pre = codeBlock.parentElement;
 
+    // Prompt string resolution
+    const prompt =
+      codeBlock.dataset.prompt ||
+      pre.dataset.prompt ||
+      (window.terminalLiveConfig && window.terminalLiveConfig.prompt) ||
+      "$";
+
     // Skip if already processed
     if (pre.classList.contains("terminal-processed")) return;
 
@@ -63,7 +70,7 @@ function initTerminalBlocks() {
     pre.replaceWith(container);
 
     playBtn.addEventListener("click", () =>
-      runBlocks(blocks, terminalBody, buttonsWrapper)
+      runBlocks(blocks, terminalBody, buttonsWrapper, prompt)
     );
 
     copyBtn.addEventListener("click", () => {
@@ -76,7 +83,7 @@ function initTerminalBlocks() {
   });
 }
 
-function runBlocks(blocks, container, buttonsWrapper) {
+function runBlocks(blocks, container, buttonsWrapper, prompt) {
   const oldButtons = container.parentElement.querySelector(".terminal-buttons");
   if (oldButtons) oldButtons.remove();
 
@@ -92,7 +99,7 @@ function runBlocks(blocks, container, buttonsWrapper) {
       replayBtn.classList.add("terminal-play");
       replayBtn.textContent = "↻ Replay";
       replayBtn.addEventListener("click", () =>
-        runBlocks(blocks, container, newWrapper)
+        runBlocks(blocks, container, newWrapper, prompt)
       );
 
       const copyBtn = document.createElement("button");
@@ -114,7 +121,7 @@ function runBlocks(blocks, container, buttonsWrapper) {
 
     const block = blocks[i];
     if (block.type === "command") {
-      typeLine(container, block.lines[0]).then(() => {
+      typeLine(container, block.lines[0], prompt).then(() => {
         i++;
         wait(300).then(nextBlock);
       });
@@ -128,10 +135,15 @@ function runBlocks(blocks, container, buttonsWrapper) {
   nextBlock();
 }
 
-function typeLine(container, text) {
+function typeLine(container, text, prompt) {
   return new Promise((resolve) => {
     const line = document.createElement("div");
     line.classList.add("line");
+
+    const promptEl = document.createElement("span");
+    promptEl.classList.add("prompt");
+    promptEl.setAttribute("data-prompt", prompt);
+    line.appendChild(promptEl);
 
     const cursor = document.createElement("span");
     cursor.classList.add("blinking-cursor");
