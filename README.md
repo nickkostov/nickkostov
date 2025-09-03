@@ -12,5 +12,24 @@ Here are some ideas to get you started:
 - 💬 Ask me about ...
 - 📫 How to reach me: ...
 - 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+ - ⚡ Fun fact: ...
+ -->
+
+### Terminal prompt customization
+
+Terminal command blocks render with a default `$` prompt. Override it by:
+
+1. Setting a `data-prompt` attribute on the `<pre>` or `<code>` element.
+2. Providing a global `window.terminalLiveConfig = { prompt: '>' }` before the script loads.
+
+Example using `data-prompt`:
+
+```html
+<pre data-prompt="#"><code class="language-terminal-input">
+echo hello
+_output_:
+hello
+</code></pre>
+```
+
+The commands above will display with a `#` prompt instead of the default `$`.
