@@ -7,3 +7,54 @@
 	</p>
 </footer>
 <script src='{{site.baseurl}}/assets/js/site.js' id="pill_site_script" type='module'></script>
+<script>
+  (function () {
+    function findDiagBlocks(root) {
+      const hits = [];
+      // Plain kramdown/rouge output
+      root.querySelectorAll('pre > code.language-diag, pre > code.lang-diag, pre > code.diag, pre > code.language-mermaid, pre > code.lang-mermaid, pre > code.mermaid')
+          .forEach(code => hits.push({ code, wrapper: code.closest('pre') }));
+
+      // Rouge wrapper blocks
+      root.querySelectorAll('div[class*="language-diag"].highlighter-rouge pre > code, div[class*="language-mermaid"].highlighter-rouge pre > code')
+          .forEach(code => hits.push({
+            code,
+            wrapper: code.closest('div.highlighter-rouge') || code.closest('pre')
+          }));
+
+      return hits;
+    }
+
+    function renderDiagBlocks(root = document) {
+      const blocks = findDiagBlocks(root);
+      if (!blocks.length) return;
+
+      blocks.forEach(({ code, wrapper }) => {
+        const container = document.createElement('div');
+        container.className = 'mermaid';
+        container.textContent = code.textContent.trim();
+        (wrapper || code.closest('pre')).replaceWith(container);
+      });
+
+      if (!window.mermaid) {
+        console.warn('[diag] Mermaid not loaded. Ensure script tag in head.');
+        return;
+      }
+
+      try {
+        mermaid.run({ querySelector: '.mermaid' });
+      } catch (e) {
+        console.error('[diag] mermaid.run failed:', e);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => renderDiagBlocks(document));
+    } else {
+      renderDiagBlocks(document);
+    }
+
+    // Expose globally for SPA navigations if added later
+    window.__renderDiagBlocks = renderDiagBlocks;
+  })();
+</script>
