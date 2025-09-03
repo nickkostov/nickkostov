@@ -1,94 +1,85 @@
-// Anime.js Analog Clock for the homepage
+// Anime.js Digital Clock (Hacker style) for the homepage
 (function () {
-  function createTicks(container) {
-    for (let i = 0; i < 60; i++) {
-      const tick = document.createElement('div');
-      tick.className = 'mark';
-      tick.style.transform = `translate(-1px, -100px) rotate(${i * 6}deg)`;
-      if (i % 5 === 0) {
-        tick.style.height = '12px';
-        tick.style.opacity = '0.9';
-      }
-      container.appendChild(tick);
+  let intervalRef = null;
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function formatTime() {
+    const d = new Date();
+    return {
+      hh: pad(d.getHours()),
+      mm: pad(d.getMinutes()),
+      ss: pad(d.getSeconds()),
+    };
+  }
+
+  function renderDigital(container) {
+    container.innerHTML = "";
+
+    const wrap = document.createElement("div");
+    wrap.className = "digital-clock";
+
+    const time = document.createElement("div");
+    time.className = "time";
+
+    const segHH = document.createElement("span");
+    segHH.className = "seg hh";
+    const colon1 = document.createElement("span");
+    colon1.className = "colon";
+    colon1.textContent = ":";
+    const segMM = document.createElement("span");
+    segMM.className = "seg mm";
+    const colon2 = document.createElement("span");
+    colon2.className = "colon";
+    colon2.textContent = ":";
+    const segSS = document.createElement("span");
+    segSS.className = "seg ss";
+
+    time.appendChild(segHH);
+    time.appendChild(colon1);
+    time.appendChild(segMM);
+    time.appendChild(colon2);
+    time.appendChild(segSS);
+
+    wrap.appendChild(time);
+
+    // Subtle entrance animation
+    if (typeof anime !== "undefined") {
+      wrap.style.opacity = "0";
+      anime({ targets: wrap, opacity: [0, 1], translateY: [-6, 0], duration: 600, easing: "easeOutQuad" });
     }
+
+    container.appendChild(wrap);
+
+    const applyTime = () => {
+      const { hh, mm, ss } = formatTime();
+      segHH.textContent = hh;
+      segMM.textContent = mm;
+      segSS.textContent = ss;
+    };
+
+    // Initial paint
+    applyTime();
+
+    // Clear & set interval for updates
+    if (intervalRef) clearInterval(intervalRef);
+    intervalRef = setInterval(applyTime, 1000);
   }
 
   function initClock() {
-    const mount = document.getElementById('anime-clock');
-    if (!mount || typeof anime === 'undefined') return;
-
-    // Clear if re-initializing (SPA navigation)
-    mount.innerHTML = '';
-
-    // Build DOM
-    const clock = document.createElement('div');
-    clock.className = 'clock';
-
-    const hour = document.createElement('div');
-    hour.className = 'hand hour';
-    const minute = document.createElement('div');
-    minute.className = 'hand minute';
-    const second = document.createElement('div');
-    second.className = 'hand second';
-    const dot = document.createElement('div');
-    dot.className = 'center-dot';
-
-    clock.appendChild(hour);
-    clock.appendChild(minute);
-    clock.appendChild(second);
-    clock.appendChild(dot);
-
-    createTicks(clock);
-    mount.appendChild(clock);
-
-    // Compute current angles
-    const now = new Date();
-    const s = now.getSeconds() + now.getMilliseconds() / 1000;
-    const m = now.getMinutes() + s / 60;
-    const h = (now.getHours() % 12) + m / 60;
-
-    const sDeg = s * 6; // 360 / 60
-    const mDeg = m * 6; // 360 / 60
-    const hDeg = h * 30; // 360 / 12
-
-    // Set initial positions (preserve translateX)
-    hour.style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
-    minute.style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
-    second.style.transform = `translateX(-50%) rotate(${sDeg}deg)`;
-
-    // Animate with continuous linear rotations
-    anime({
-      targets: second,
-      rotate: '+=360',
-      duration: 60000,
-      easing: 'linear',
-      loop: true,
-    });
-
-    anime({
-      targets: minute,
-      rotate: '+=360',
-      duration: 60 * 60 * 1000,
-      easing: 'linear',
-      loop: true,
-    });
-
-    anime({
-      targets: hour,
-      rotate: '+=360',
-      duration: 12 * 60 * 60 * 1000,
-      easing: 'linear',
-      loop: true,
-    });
+    const mount = document.getElementById("anime-clock");
+    if (!mount) return;
+    renderDigital(mount);
   }
 
   // Expose for SPA re-init
   window.__initAnimeClock = initClock;
 
   // Initial load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initClock);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initClock);
   } else {
     initClock();
   }
 })();
+

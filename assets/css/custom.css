@@ -108,12 +108,16 @@ footer {
 }
 .mermaid { overflow: auto; margin: 1rem 0; }
 
-/* Anime.js clock */
-#anime-clock { display: flex; justify-content: center; margin: 1rem 0 2rem; }
-#anime-clock .clock { position: relative; width: 200px; height: 200px; border: 4px solid var(--theme-color); border-radius: 50%; background: transparent; }
-#anime-clock .mark { position: absolute; left: 50%; top: 50%; width: 2px; height: 8px; background: var(--theme-color); transform-origin: center -92px; opacity: 0.5; }
-#anime-clock .hand { position: absolute; left: 50%; bottom: 50%; transform: translateX(-50%) rotate(0deg); transform-origin: bottom center; background: var(--theme-color); border-radius: 2px; }
-#anime-clock .hand.hour { width: 4px; height: 56px; }
-#anime-clock .hand.minute { width: 3px; height: 76px; }
-#anime-clock .hand.second { width: 2px; height: 86px; background: #e74c3c; }
-#anime-clock .center-dot { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; background: var(--theme-color); border-radius: 50%; transform: translate(-50%, -50%); }
+/* Digital clock (hacker style) */
+#anime-clock { position: fixed; top: 0.75rem; right: 0.75rem; z-index: 10; pointer-events: none; }
+#anime-clock .digital-clock { pointer-events: none; font-family: SFMono-Regular, Menlo, Consolas, Monaco, "Liberation Mono", "Courier New", monospace; color: #00ff9c; background: rgba(2, 8, 6, 0.85); border: 1px solid #00ff9c; border-radius: 6px; padding: 6px 10px; box-shadow: 0 0 8px rgba(0, 255, 156, 0.35), inset 0 0 8px rgba(0, 255, 156, 0.15); text-shadow: 0 0 6px rgba(0,255,156,0.6), 0 0 12px rgba(0,255,156,0.4); position: relative; }
+#anime-clock .digital-clock .time { font-size: 1.1rem; letter-spacing: 0.08em; line-height: 1; }
+#anime-clock .digital-clock .colon { animation: blink 1s steps(1, end) infinite; margin: 0 2px; display: inline-block; }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.2; } }
+
+/* Subtle scanlines overlay */
+#anime-clock .digital-clock::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient( to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.0) 2px, rgba(0,0,0,0.08) 3px ); pointer-events: none; border-radius: 6px; }
+
+@media screen and (max-width: 780px) {
+  #anime-clock .digital-clock { font-size: 0.9rem; padding: 5px 8px; }
+}
