@@ -162,8 +162,12 @@
   }
 
   function initClock() {
-    const mount = document.getElementById("anime-clock");
-    if (!mount) return;
+    let mount = document.getElementById("anime-clock");
+    if (!mount) {
+      mount = document.createElement("div");
+      mount.id = "anime-clock";
+      document.body.appendChild(mount);
+    }
     renderDigital(mount);
   }
 
