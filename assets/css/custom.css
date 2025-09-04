@@ -109,7 +109,8 @@ footer {
 .mermaid { overflow: auto; margin: 1rem 0; }
 
 /* Digital clock (hacker style) */
-#anime-clock { position: fixed; top: 3.25rem; right: calc(20% + 0.75rem); z-index: 10; pointer-events: none; display: flex; align-items: center; gap: 8px; }
+#anime-clock { position: fixed; top: 3.25rem; right: calc(20% + 0.75rem); z-index: 10; pointer-events: none; display: flex; align-items: center; gap: 8px; max-width: 100vw; }
+#anime-clock .hud-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; max-width: 100%; }
 #anime-clock .digital-clock { pointer-events: none; font-family: SFMono-Regular, Menlo, Consolas, Monaco, "Liberation Mono", "Courier New", monospace; color: #00ff9c; background: rgba(2, 8, 6, 0.85); border: 1px solid #00ff9c; border-radius: 6px; padding: 6px 10px; box-shadow: 0 0 8px rgba(0, 255, 156, 0.35), inset 0 0 8px rgba(0, 255, 156, 0.15); text-shadow: 0 0 6px rgba(0,255,156,0.6), 0 0 12px rgba(0,255,156,0.4); position: relative; }
 #anime-clock .weather { pointer-events: none; font-family: SFMono-Regular, Menlo, Consolas, Monaco, "Liberation Mono", "Courier New", monospace; color: #00ff9c; background: rgba(2, 8, 6, 0.85); border: 1px solid #00ff9c; border-radius: 6px; padding: 6px 10px; box-shadow: 0 0 8px rgba(0, 255, 156, 0.35), inset 0 0 8px rgba(0, 255, 156, 0.15); text-shadow: 0 0 6px rgba(0,255,156,0.6), 0 0 12px rgba(0,255,156,0.4); position: relative; display: flex; align-items: center; gap: 6px; }
 #anime-clock .digital-clock .time { font-size: 1.1rem; letter-spacing: 0.08em; line-height: 1; }
@@ -123,6 +124,16 @@ footer {
   #anime-clock { right: calc(10% + 0.75rem); top: 1rem; }
   #anime-clock .digital-clock { font-size: 0.9rem; padding: 5px 8px; }
   #anime-clock .weather { font-size: 0.9rem; padding: 5px 8px; }
+}
+
+/* Extra-small devices */
+@media screen and (max-width: 480px) {
+  #anime-clock { right: calc(env(safe-area-inset-right, 0px) + 8px); top: calc(env(safe-area-inset-top, 0px) + 8px); }
+  #anime-clock .digital-clock .time { font-size: 0.85rem; }
+  #anime-clock .digital-clock .ss { display: none; }
+  #anime-clock .digital-clock .colon:last-of-type { display: none; }
+  #anime-clock .weather { font-size: 0.85rem; padding: 4px 7px; }
+  #anime-clock .hud-row { gap: 6px; }
 }
 
 /* Optional: hover glow when not pointer-events none (for testing) */
