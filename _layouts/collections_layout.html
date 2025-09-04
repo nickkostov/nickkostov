@@ -22,7 +22,7 @@
     </style>
 
     <!-- Terminal CSS -->
-    <link rel="stylesheet" href="{{ '/assets/css/terminal-live.css' | absolute_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/terminal-live.css' | absolute_url }}?v={{ site.time | date: '%s' }}">
   </head>
   <body>
     <div id="indicator"></div>
@@ -45,10 +45,10 @@
     </div>
 
     <!-- Terminal JS -->
-    <script src="{{ '/assets/js/terminal-live.js' | absolute_url }}"></script>
+    <script src="{{ '/assets/js/terminal-live.js' | absolute_url }}?v={{ site.time | date: '%s' }}"></script>
     <!-- Anime Clock JS (safe to include globally) -->
-    <script src="{{ '/assets/js/clock.js' | absolute_url }}"></script>
+    <script src="{{ '/assets/js/clock.js' | absolute_url }}?v={{ site.time | date: '%s' }}"></script>
     <!-- Name animate JS -->
-    <script src="{{ '/assets/js/name-animate.js' | absolute_url }}"></script>
+    <script src="{{ '/assets/js/name-animate.js' | absolute_url }}?v={{ site.time | date: '%s' }}"></script>
   </body>
 </html>
