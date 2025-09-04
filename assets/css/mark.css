@@ -1,6 +1,6 @@
 * {
 	font-family: monospace;
-	--theme-color: #f78e66;
+	--theme-color: #00ff9c;
 }
 
 p {
@@ -14,7 +14,7 @@ p {
 }
 
 blockquote {
-	border-left: 4px solid #42b983;
+	border-left: 4px solid #00ff9c;
 	padding: 0 15px !important;
 	margin: 0px;
 }
