@@ -1,12 +1,12 @@
 // Animate site title (Nikolay Kostov) by lines using Splitting + anime.js
 (function () {
   function init() {
-    const el = document.getElementById("site-title");
-    if (!el || typeof anime === "undefined") return;
+    try {
+      const el = document.getElementById("site-title");
+      if (!el || typeof anime === "undefined") return;
 
-    // Prevent double-initialization on SPA nav
-    if (el.dataset.nkAnimated === "1") return;
-    el.dataset.nkAnimated = "1";
+      // Prevent double-initialization on SPA nav
+      if (el.dataset.nkAnimated === "1") return;
 
     // Split into lines
     let inners = [];
@@ -45,6 +45,10 @@
       loop: true,
       loopDelay: 500
     });
+    el.dataset.nkAnimated = "1";
+    } catch (e) {
+      console.error('[name-animate] init failed', e);
+    }
   }
 
   // Initial + SPA re-init
