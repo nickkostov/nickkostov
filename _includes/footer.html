@@ -7,6 +7,8 @@
 	</p>
 </footer>
 <script src='{{site.baseurl}}/assets/js/site.js' id="pill_site_script" type='module'></script>
+<!-- Animate site title by lines (ensure runs after content + SPA nav) -->
+<script src="{{ '/assets/js/name-animate.js' | absolute_url }}?v={{ site.time | date: '%s' }}"></script>
 <script>
   (function () {
     function findDiagBlocks(root) {
