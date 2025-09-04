@@ -1,12 +1,12 @@
 /* Основен контейнер за терминала */
 .terminal-box {
   background-color: #000;
-  color: #33ff33;
+  color: #00ff9c;
   font-family: monospace;
   padding: 1rem;
   border-radius: 8px;
   border: 1px solid #444;
-  box-shadow: 0 0 15px #0f0;
+  box-shadow: 0 0 15px #00ff9c;
   margin-bottom: 2rem;
   position: relative;
 }
@@ -16,7 +16,7 @@
   display: inline-block;
   width: 10px;
   height: 1em;
-  background-color: #33ff33;
+  background-color: #00ff9c;
   margin-left: 4px;
   animation: blink 1s step-start infinite;
 }
@@ -34,12 +34,12 @@
 
 /* Prompt styling */
 .prompt {
-  color: #33ff33;
+  color: #00ff9c;
 }
 
 .prompt::before {
   content: attr(data-prompt) " ";
-  color: #0f0;
+  color: #00ff9c;
 }
 
 /* Контейнер за бутоните */
@@ -58,8 +58,8 @@
   min-width: 100px;
   text-align: center;
   background: transparent;
-  border: 1px solid #00ff00;
-  color: #00ff00;
+  border: 1px solid #00ff9c;
+  color: #00ff9c;
   padding: 4px 8px;
   font-family: monospace;
   border-radius: 4px;
@@ -71,6 +71,6 @@
 /* Hover ефект */
 .terminal-play:hover,
 .terminal-copy:hover {
-  background: #00ff00;
+  background: #00ff9c;
   color: #000;
 }
