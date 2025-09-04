@@ -2,26 +2,37 @@
 (function () {
   function init() {
     const el = document.getElementById("site-title");
-    if (!el || typeof anime === "undefined" || typeof Splitting === "undefined") return;
+    if (!el || typeof anime === "undefined") return;
 
     // Prevent double-initialization on SPA nav
     if (el.dataset.nkAnimated === "1") return;
     el.dataset.nkAnimated = "1";
 
     // Split into lines
-    const results = Splitting({ target: el, by: "lines" }) || [];
-    const lines = (results[0] && results[0].lines) ? results[0].lines : [];
-    if (!lines.length) return;
+    let inners = [];
+    let lines = [];
+    if (typeof Splitting !== "undefined") {
+      const results = Splitting({ target: el, by: "lines" }) || [];
+      lines = (results[0] && results[0].lines) ? results[0].lines : [];
+    }
 
     // Wrap each line with an inner span so we can clip the container
-    const inners = [];
-    lines.forEach(function(line) {
+    if (lines.length) {
+      lines.forEach(function(line) {
+        const inner = document.createElement("span");
+        inner.className = "line-inner";
+        while (line.firstChild) inner.appendChild(line.firstChild);
+        line.appendChild(inner);
+        inners.push(inner);
+      });
+    } else {
+      // Fallback: animate the whole element as one line
       const inner = document.createElement("span");
       inner.className = "line-inner";
-      while (line.firstChild) inner.appendChild(line.firstChild);
-      line.appendChild(inner);
-      inners.push(inner);
-    });
+      while (el.firstChild) inner.appendChild(el.firstChild);
+      el.appendChild(inner);
+      inners = [inner];
+    }
 
     // Animate lines up and out, then loop
     anime({
@@ -46,4 +57,3 @@
   // Expose for calls after PJAX nav
   window.__initNameAnimate = init;
 })();
-

@@ -34,6 +34,15 @@ pill("#page", {
     } catch (e) {
       console.error('[site] anime clock init failed:', e);
     }
+
+    // Re-init name animation after navigation
+    try {
+      if (window.__initNameAnimate) {
+        window.__initNameAnimate();
+      }
+    } catch (e) {
+      console.error('[site] name animate init failed:', e);
+    }
   }
 });
 
