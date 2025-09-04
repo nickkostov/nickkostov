@@ -10,6 +10,12 @@
 <!-- Animate site title by lines (ensure runs after content + SPA nav) -->
 <script src="{{ '/assets/js/name-animate.js' | absolute_url }}?v={{ site.time | date: '%s' }}"></script>
 <script>
+  // Ensure animation initializes even if DOMContentLoaded has already fired
+  try { window.__initNameAnimate && window.__initNameAnimate(); } catch(e) { console.error('[footer] initNameAnimate failed', e); }
+  // Also re-run after a slight delay to handle late paints/fonts
+  setTimeout(function(){ try { window.__initNameAnimate && window.__initNameAnimate(); } catch(e){} }, 250);
+</script>
+<script>
   (function () {
     function findDiagBlocks(root) {
       const hits = [];
