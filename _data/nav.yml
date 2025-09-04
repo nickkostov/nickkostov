@@ -3,6 +3,9 @@ list:
     url: ""
   - title: About
     url: about
+  - title: Projects
+    url: /projects/
+
 #  - title: Terminal Live Examples
 #    url: terminal-live-examples
 #  - title: Feed
