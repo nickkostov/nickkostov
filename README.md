@@ -2,7 +2,7 @@
 
 If you can't see my contribs here is 2025:
 
-[image](contributions.png)
+![image](contributions.png)
 <!--
 **nickkostov/nickkostov** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
