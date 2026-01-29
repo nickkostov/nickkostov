@@ -1,6 +1,7 @@
 ## Hi there 👋
 
 If you can't see my contribs here is 2025:
+![](metrics.classic.svg)
 
 ![image](contributions.png)
 <!--
