@@ -135,13 +135,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                                 <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
                             </svg>
-                            <span class="diff-handle">nickkostov/jenkins</span>
-                        </div>
-                        <div class="field">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
-                            </svg>
-                            <span class="diff-handle">nickkostov/jira-cli</span>
+                            <span class="diff-handle">nickkostov/detskistapki-static</span>
                         </div>
                         <div class="field">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
@@ -153,7 +147,19 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                                 <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
                             </svg>
+                            <span class="diff-handle">nickkostov/confluence-cli</span>
+                        </div>
+                        <div class="field">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
+                            </svg>
                             <span class="diff-handle">nickkostov/argocd</span>
+                        </div>
+                        <div class="field">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
+                            </svg>
+                            <span class="diff-handle">nickkostov/helm-charts</span>
                         </div>
                         <div class="field">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
@@ -177,19 +183,13 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                                 <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
                             </svg>
-                            <span class="diff-handle">nickkostov/datadog_inventory</span>
+                            <span class="diff-handle">nickkostov/assume_role</span>
                         </div>
                         <div class="field">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                                 <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
                             </svg>
-                            <span class="diff-handle">nickkostov/ansible</span>
-                        </div>
-                        <div class="field">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4 8a4 4 0 118 0 4 4 0 01-8 0z"/>
-                            </svg>
-                            <span class="diff-handle">nickkostov/docker-label-grepper</span>
+                            <span class="diff-handle">nickkostov/webdev</span>
                         </div>
                     </section>
                     <section>
@@ -197,23 +197,11 @@
                             <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
-                            <div class="diff-box deleted"></div>
+                            <div class="diff-box added"></div>
                             <div class="diff-box deleted"></div>
                             <div class="diff-stats">
-                                <span class="added"> +3.02k</span>
-                                <span class="deleted"> -2.21k</span>
-                            </div>
-                            <span> </span>
-                        </div>
-                        <div class="field">
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box deleted"></div>
-                            <div class="diff-box deleted"></div>
-                            <div class="diff-stats">
-                                <span class="added"> +3.49k</span>
-                                <span class="deleted"> -1.66k</span>
+                                <span class="added"> +15.6k</span>
+                                <span class="deleted"> -1.11k</span>
                             </div>
                             <span> </span>
                         </div>
@@ -233,11 +221,35 @@
                             <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
+                            <div class="diff-box deleted"></div>
+                            <div class="diff-stats">
+                                <span class="added"> +3.27k</span>
+                                <span class="deleted">   -365</span>
+                            </div>
+                            <span> </span>
+                        </div>
+                        <div class="field">
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
                             <div class="diff-box deleted"></div>
                             <div class="diff-box deleted"></div>
                             <div class="diff-stats">
                                 <span class="added"> +2.88k</span>
                                 <span class="deleted">   -769</span>
+                            </div>
+                            <span> </span>
+                        </div>
+                        <div class="field">
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
+                            <div class="diff-box deleted"></div>
+                            <div class="diff-stats">
+                                <span class="added"> +2.21k</span>
+                                <span class="deleted">     -2</span>
                             </div>
                             <span> </span>
                         </div>
@@ -281,35 +293,23 @@
                             <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
+                            <div class="diff-box deleted"></div>
+                            <div class="diff-box deleted"></div>
+                            <div class="diff-stats">
+                                <span class="added">   +585</span>
+                                <span class="deleted">   -304</span>
+                            </div>
+                            <span> </span>
+                        </div>
+                        <div class="field">
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
+                            <div class="diff-box added"></div>
                             <div class="diff-box added"></div>
                             <div class="diff-box deleted"></div>
                             <div class="diff-stats">
-                                <span class="added">   +677</span>
+                                <span class="added">   +676</span>
                                 <span class="deleted">     -1</span>
-                            </div>
-                            <span> </span>
-                        </div>
-                        <div class="field">
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box deleted"></div>
-                            <div class="diff-stats">
-                                <span class="added">   +580</span>
-                                <span class="deleted">    -96</span>
-                            </div>
-                            <span> </span>
-                        </div>
-                        <div class="field">
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box added"></div>
-                            <div class="diff-box deleted"></div>
-                            <div class="diff-box deleted"></div>
-                            <div class="diff-stats">
-                                <span class="added">   +305</span>
-                                <span class="deleted">    -95</span>
                             </div>
                             <span> </span>
                         </div>
