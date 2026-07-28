@@ -1,10 +1,49 @@
----
-title: Guides and Examples
-layout: collections_layout
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikolay Kostov - Digital CV</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="terminal-header">
+        <div class="terminal-title">
+            <i class="fas fa-terminal"></i>
+            <span>nikolay-kostov-cv</span>
+        </div>
+        <div class="terminal-controls">
+            <div class="control-btn close"></div>
+            <div class="control-btn minimize"></div>
+            <div class="control-btn maximize"></div>
+        </div>
+    </div>
+    
+    <div class="terminal-body" id="terminalBody">
+        <div class="output-line command-output">
+            Welcome to Nikolay Kostov's Digital CV Terminal
+        </div>
+        <div class="output-line command-output">
+            Type 'help' to see available commands
+        </div>
+        <div class="prompt-line">
+            <span class="prompt-user">nikolay.kostov</span>
+            <span class="prompt-host">@nikolay-kostov-cv</span>
+            <span class="prompt-path">~</span>
+            <span class="prompt-symbol">$</span>
+        </div>
+        <div class="input-line">
+            <input type="text" class="command-input" id="commandInput" autofocus>
+            <span class="cursor"></span>
+        </div>
+    </div>
+    
+    <div class="terminal-footer">
+        <div>Nikolay Kostov - Digital CV Terminal</div>
+        <div>Press Ctrl+C to exit</div>
+    </div>
 
-<div id="anime-clock"></div>
-
-{% for post in site.posts %}
-<a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-{%endfor%}
+    <script src="javascript.js"></script>
+</body>
+</html>
