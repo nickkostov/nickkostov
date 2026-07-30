@@ -276,15 +276,6 @@ body {
     justify-content: space-between;
 }
 
-.cursor {
-    display: inline-block;
-    width: 8px;
-    height: 16px;
-    background-color: #00ff00;
-    margin-left: 2px;
-    animation: blink 1s infinite;
-}
-
 .progress-bar {
     width: 100%;
     height: 10px;

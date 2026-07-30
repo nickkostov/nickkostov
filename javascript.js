@@ -1,114 +1,70 @@
 // Sample content data (would normally come from YAML)
-const contentData = {
-    skills: {
-        cloud: ["AWS", "Azure", "GCP"],
-        containerOrchestrators: ["Docker", "Podman", "Kubernetes"],
-        programmingLanguages: ["JavaScript", "Python", "Go", "Java"],
-        databases: ["PostgreSQL", "MongoDB", "Redis"],
-        devOps: ["Jenkins", "GitLab CI", "Terraform", "Ansible"],
-        frameworks: ["React", "Node.js", "Express", "Django"]
-    },
-    cv: {
-        company1: {
-            jobTitle: "Senior Cloud Engineer",
-            company: "Tech Solutions Inc.",
-            period: "2020 - Present",
-            skills: ["AWS", "Kubernetes", "Terraform", "Docker"],
-            projects: ["Cloud Migration Project", "Microservices Architecture"]
-        },
-        company2: {
-            jobTitle: "DevOps Engineer",
-            company: "Digital Innovations Ltd.",
-            period: "2017 - 2020",
-            skills: ["Jenkins", "GitLab CI", "Docker", "AWS"],
-            projects: ["CI/CD Pipeline Implementation", "Infrastructure Automation"]
-        },
-        company3: {
-            jobTitle: "Software Developer",
-            company: "WebCraft Studios",
-            period: "2015 - 2017",
-            skills: ["JavaScript", "React", "Node.js", "Python"],
-            projects: ["E-commerce Platform", "Mobile App Backend"]
-        }
-    },
-    projects: [
-        {
-            name: "Cloud Migration Solution",
-            description: "Led migration of legacy applications to AWS cloud infrastructure, reducing costs by 40%.",
-            technologies: ["AWS", "Kubernetes", "Terraform", "Docker"],
-            period: "2021"
-        },
-        {
-            name: "Microservices Architecture",
-            description: "Designed and implemented microservices architecture for enterprise application using Docker and Kubernetes.",
-            technologies: ["Kubernetes", "Docker", "Go", "gRPC"],
-            period: "2020"
-        },
-        {
-            name: "DevOps Automation Platform",
-            description: "Built CI/CD platform with Jenkins and GitLab CI, automating deployment processes for 20+ applications.",
-            technologies: ["Jenkins", "GitLab CI", "Ansible", "Docker"],
-            period: "2019"
-        }
-    ],
-    about: {
-        name: "Nikolay Kostov",
-        title: "Senior Cloud Engineer & DevOps Specialist",
-        description: "Passionate cloud engineer with over 8 years of experience in building scalable, reliable systems. Specialized in cloud infrastructure, container orchestration, and DevOps practices.",
-        education: "MSc in Computer Science, University of Sofia",
-        location: "Sofia, Bulgaria"
-    },
-    contact: {
-        email: "nikolay.kostov@example.com",
-        phone: "+359 123 456 789",
-        linkedin: "linkedin.com/in/nikolaykostov",
-        github: "github.com/nikolaykostov",
-        website: "nikolay-kostov.dev"
-    },
-    stats: {
-        experienceYears: 8,
-        projectsCompleted: 25,
-        companiesWorked: 3,
-        certifications: 5
-    }
-};
+let contentData = {};
+
+// Load content data from JSON file
+async function loadContentData() {
+    const response = await fetch('content/content.json');
+    contentData = await response.json();
+}
+
+// Load the content data when the script loads
+loadContentData();
 
 // DOM elements
 const terminalBody = document.getElementById('terminalBody');
-const commandInput = document.getElementById('commandInput');
+const originalCommandInput = document.getElementById('commandInput');
 
 // Current command history
 let commandHistory = [];
 let historyIndex = -1;
+let hasRunCommand = false;
+
+// Initialize terminal with event listener on existing input field
+function initTerminal() {
+    if (originalCommandInput) {
+        originalCommandInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                processCommand(this.value);
+                this.value = '';
+            } else if (e.key === 'ArrowUp') {
+                if (commandHistory.length > 0) {
+                    if (historyIndex > 0) {
+                        historyIndex--;
+                    }
+                    this.value = commandHistory[historyIndex] || '';
+                }
+            } else if (e.key === 'ArrowDown') {
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    this.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    this.value = '';
+                }
+            }
+        });
+    }
+}
 
 // Process command function
 function processCommand(command) {
     command = command.trim().toLowerCase();
     
     if (command === '') return;
+
+    // Show only the current command and its output.
+    terminalBody.querySelectorAll('.output-line').forEach(line => line.remove());
+    hasRunCommand = true;
     
     // Add to history
     commandHistory.push(command);
     historyIndex = commandHistory.length;
     
-    // Display command
-    const promptLine = document.createElement('div');
-    promptLine.className = 'prompt-line';
-    promptLine.innerHTML = `
-        <span class="prompt-user">nikolay.kostov</span>
-        <span class="prompt-host">@nikolay-kostov-cv</span>
-        <span class="prompt-path">~</span>
-        <span class="prompt-symbol">$</span>
-    `;
-    
-    const inputLine = document.createElement('div');
-    inputLine.className = 'input-line';
-    inputLine.innerHTML = `
-        <span class="command-output">${command}</span>
-    `;
-    
-    terminalBody.appendChild(promptLine);
-    terminalBody.appendChild(inputLine);
+    // Display the command that was entered (just the input line)
+    const commandLine = document.createElement('div');
+    commandLine.className = 'output-line';
+    commandLine.innerHTML = `<div class="command-output"><span class="command-success">${command}</span></div>`;
+    terminalBody.appendChild(commandLine);
     
     // Process command
     let output = '';
@@ -123,10 +79,10 @@ function processCommand(command) {
                 <div class="output-line"><span class="command-success">projects</span> - My projects</div>
                 <div class="output-line"><span class="command-success">contact</span> - Contact information</div>
                 <div class="output-line"><span class="command-success">clear</span> - Clear terminal</div>
-                <div class="output-line"><span class="command-success">help</span> - Show this help</div>
-                <div class="output-line"><span class="command-success">stats</span> - My professional stats</div>
+                <div class="output-line"><span class="command-success">help</span> - Show help</div>
+                <div class="output-line"><span class="command-success">stats</span> - Professional stats</div>
                 <div class="output-line"><span class="command-success">quote</span> - Inspirational quote</div>
-                <div class="output-line"><span class="command-success">history</span> - Show command history</div>
+                <div class="output-line"><span class="command-success">history</span> - Command history</div>
                 <div class="output-line"><span class="command-success">experience</span> - Detailed experience</div>
                 <div class="output-line"><span class="command-success">certifications</span> - My certifications</div>
                 <div class="output-line"><span class="command-success">resume</span> - Download resume</div>
@@ -280,55 +236,60 @@ function processCommand(command) {
             break;
             
         case 'clear':
-            // Clear all content
-            terminalBody.innerHTML = '';
+            // Clear only the display output, keep the input prompt
+            // Remove all children
+            while (terminalBody.firstChild) {
+                terminalBody.removeChild(terminalBody.firstChild);
+            }
             
-            // Re-add the prompt and input line
-            const newPromptLine = document.createElement('div');
-            newPromptLine.className = 'prompt-line';
-            newPromptLine.innerHTML = `
+            // Add back the initial prompt and input that already exist in the HTML
+            const promptLine = document.createElement('div');
+            promptLine.className = 'prompt-line';
+            promptLine.innerHTML = `
                 <span class="prompt-user">nikolay.kostov</span>
                 <span class="prompt-host">@nikolay-kostov-cv</span>
                 <span class="prompt-path">~</span>
                 <span class="prompt-symbol">$</span>
             `;
             
-            const newInputLine = document.createElement('div');
-            newInputLine.className = 'input-line';
-            newInputLine.innerHTML = `
+            terminalBody.appendChild(promptLine);
+            
+            const inputLine = document.createElement('div');
+            inputLine.className = 'input-line';
+            inputLine.innerHTML = `
                 <input type="text" class="command-input" id="commandInput" autofocus>
-                <span class="cursor"></span>
             `;
             
-            terminalBody.appendChild(newPromptLine);
-            terminalBody.appendChild(newInputLine);
+            terminalBody.appendChild(inputLine);
             
-            // Re-attach event listener to the new input
+            // Reattach listener to the new input element
             const newCommandInput = document.getElementById('commandInput');
-            newCommandInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    processCommand(this.value);
-                    this.value = '';
-                } else if (e.key === 'ArrowUp') {
-                    if (commandHistory.length > 0) {
-                        if (historyIndex > 0) {
-                            historyIndex--;
-                        }
-                        this.value = commandHistory[historyIndex] || '';
-                    }
-                } else if (e.key === 'ArrowDown') {
-                    if (historyIndex < commandHistory.length - 1) {
-                        historyIndex++;
-                        this.value = commandHistory[historyIndex];
-                    } else {
-                        historyIndex = commandHistory.length;
+            if (newCommandInput) {
+                newCommandInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        processCommand(this.value);
                         this.value = '';
+                    } else if (e.key === 'ArrowUp') {
+                        if (commandHistory.length > 0) {
+                            if (historyIndex > 0) {
+                                historyIndex--;
+                            }
+                            this.value = commandHistory[historyIndex] || '';
+                        }
+                    } else if (e.key === 'ArrowDown') {
+                        if (historyIndex < commandHistory.length - 1) {
+                            historyIndex++;
+                            this.value = commandHistory[historyIndex];
+                        } else {
+                            historyIndex = commandHistory.length;
+                            this.value = '';
+                        }
                     }
-                }
-            });
+                });
+            }
             
-            // Focus the new input
-            newCommandInput.focus();
+            // Focus the input field
+            newCommandInput?.focus();
             return;
             
         case 'stats':
@@ -415,29 +376,11 @@ function processCommand(command) {
             output = `
                 <div class="command-title">Resume</div>
                 <div class="command-output">
-                    Downloading resume...
-                </div>
-                <div class="progress-bar">
-                    <div class="progress" id="downloadProgress"></div>
-                </div>
-                <div class="command-output">
-                    <span class="command-success">Resume downloaded successfully!</span> (PDF format)
+                    <a class="command-success" href="resume/resume.pdf" download>Download resume</a>
                 </div>
             `;
-            
-            // Simulate download progress
-            const progressBar = document.getElementById('downloadProgress');
-            let width = 0;
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                } else {
-                    width += 5;
-                    progressBar.style.width = width + '%';
-                }
-            }, 100);
             break;
-            
+            w
         case 'skills-detailed':
             output = `
                 <div class="command-title">Detailed Skills Breakdown</div>
@@ -475,36 +418,20 @@ function processCommand(command) {
     terminalBody.scrollTop = terminalBody.scrollHeight;
 }
 
-// Event listener for command input
-commandInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        processCommand(this.value);
-        this.value = '';
-    } else if (e.key === 'ArrowUp') {
-        if (commandHistory.length > 0) {
-            if (historyIndex > 0) {
-                historyIndex--;
-            }
-            this.value = commandHistory[historyIndex] || '';
-        }
-    } else if (e.key === 'ArrowDown') {
-        if (historyIndex < commandHistory.length - 1) {
-            historyIndex++;
-            this.value = commandHistory[historyIndex];
-        } else {
-            historyIndex = commandHistory.length;
-            this.value = '';
-        }
-    }
+// Initialize the terminal when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initTerminal();
 });
 
 // Focus input on terminal click
 terminalBody.addEventListener('click', function() {
-    commandInput.focus();
+    document.getElementById('commandInput')?.focus();
 });
 
 // Initial welcome message
 setTimeout(() => {
+    if (hasRunCommand) return;
+
     const welcomeLine = document.createElement('div');
     welcomeLine.className = 'output-line command-output';
     welcomeLine.innerHTML = `

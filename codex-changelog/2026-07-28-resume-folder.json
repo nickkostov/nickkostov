@@ -1,0 +1,9 @@
+{
+  "prompt": "Can we have a folder resume and have it there?",
+  "output": "Created resume/resume.md with the current CV content and changed the resume command to provide a real download link instead of a fake progress animation.",
+  "files_changed": [
+    "javascript.js",
+    "resume/resume.md"
+  ],
+  "sensitive_data": "none"
+}

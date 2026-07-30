@@ -1,0 +1,73 @@
+{
+    "skills": {
+        "cloud": ["AWS", "Azure", "GCP"],
+        "containerOrchestrators": ["Docker", "Podman", "Kubernetes"],
+        "programmingLanguages": ["JavaScript", "Python", "Go", "Java"],
+        "databases": ["PostgreSQL", "MongoDB", "Redis"],
+        "devOps": ["Jenkins", "GitLab CI", "Terraform", "Ansible"],
+        "frameworks": ["React", "Node.js", "Express", "Django"]
+    },
+    "cv": {
+        "company1": {
+            "jobTitle": "Senior Cloud Engineer",
+            "company": "Tech Solutions Inc.",
+            "period": "2020 - Present",
+            "skills": ["AWS", "Kubernetes", "Terraform", "Docker"],
+            "projects": ["Cloud Migration Project", "Microservices Architecture"]
+        },
+        "company2": {
+            "jobTitle": "DevOps Engineer",
+            "company": "Digital Innovations Ltd.",
+            "period": "2017 - 2020",
+            "skills": ["Jenkins", "GitLab CI", "Docker", "AWS"],
+            "projects": ["CI/CD Pipeline Implementation", "Infrastructure Automation"]
+        },
+        "company3": {
+            "jobTitle": "Software Developer",
+            "company": "WebCraft Studios",
+            "period": "2015 - 2017",
+            "skills": ["JavaScript", "React", "Node.js", "Python"],
+            "projects": ["E-commerce Platform", "Mobile App Backend"]
+        }
+    },
+    "projects": [
+        {
+            "name": "Cloud Migration Solution",
+            "description": "Led migration of legacy applications to AWS cloud infrastructure, reducing costs by 40%.",
+            "technologies": ["AWS", "Kubernetes", "Terraform", "Docker"],
+            "period": "2021"
+        },
+        {
+            "name": "Microservices Architecture",
+            "description": "Designed and implemented microservices architecture for enterprise application using Docker and Kubernetes.",
+            "technologies": ["Kubernetes", "Docker", "Go", "gRPC"],
+            "period": "2020"
+        },
+        {
+            "name": "DevOps Automation Platform",
+            "description": "Built CI/CD platform with Jenkins and GitLab CI, automating deployment processes for 20+ applications.",
+            "technologies": ["Jenkins", "GitLab CI", "Ansible", "Docker"],
+            "period": "2019"
+        }
+    ],
+    "about": {
+        "name": "Nikolay Kostov",
+        "title": "Senior Cloud Engineer & DevOps Specialist",
+        "description": "Passionate cloud engineer with over 8 years of experience in building scalable, reliable systems. Specialized in cloud infrastructure, container orchestration, and DevOps practices.",
+        "education": "MSc in Computer Science, University of Sofia",
+        "location": "Sofia, Bulgaria"
+    },
+    "contact": {
+        "email": "nikolay.kostov@example.com",
+        "phone": "+359 123 456 789",
+        "linkedin": "linkedin.com/in/nikolaykostov",
+        "github": "github.com/nikolaykostov",
+        "website": "nikolay-kostov.dev"
+    },
+    "stats": {
+        "experienceYears": 8,
+        "projectsCompleted": 25,
+        "companiesWorked": 3,
+        "certifications": 5
+    }
+}
