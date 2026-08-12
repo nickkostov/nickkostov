@@ -1,0 +1,16 @@
+{
+  "prompt": "I would like to remove the github option (button) and command",
+  "output": "Removed the standalone GitHub command, its open github alias, renderer, generated navigation button, help entry, and related test/documentation references. The GitHub contact link remains available under the contact command. Added a regression test asserting no GitHub command or navigation button is exposed. Final validation: 41 Playwright tests passed; JavaScript, JSON, and whitespace checks passed.",
+  "files_changed": [
+    "javascript.js",
+    "tests/terminal.smoke.spec.js",
+    "AGENTS.md",
+    "docs/architecture.md",
+    "docs/how-to/local-container.md",
+    "docs/terminal-improvements-plan.md",
+    "context-cache.md",
+    "cmd-log/2026-08-12-remove-github-command.md",
+    "codex-changelog/2026-08-12-remove-github-command.json"
+  ],
+  "sensitive_data": "none"
+}

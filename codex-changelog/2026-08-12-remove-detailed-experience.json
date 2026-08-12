@@ -1,0 +1,18 @@
+{
+  "prompt": "The detailed bit of the experiance part is a bit much. I think we should remove it.",
+  "output": "Removed the detailed experience section from the merged CV output, deleted its content/schema validation, and updated tests and documentation. The CV view now contains employment history and the downloadable PDF resume only. Final validation: 42 Playwright tests passed; Pages artifact, JavaScript, JSON, and whitespace checks passed.",
+  "files_changed": [
+    "javascript.js",
+    "content/content.json",
+    "tests/terminal.smoke.spec.js",
+    "AGENTS.md",
+    "docs/architecture.md",
+    "docs/how-to/local-container.md",
+    "docs/how-to/update-cv-content.md",
+    "docs/terminal-improvements-plan.md",
+    "context-cache.md",
+    "cmd-log/2026-08-12-remove-detailed-experience.md",
+    "codex-changelog/2026-08-12-remove-detailed-experience.json"
+  ],
+  "sensitive_data": "none"
+}

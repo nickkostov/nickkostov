@@ -13,26 +13,30 @@
         "frameworks": ["React", "Node.js", "Express", "Django"]
     },
     "cv": {
-        "company1": {
-            "jobTitle": "Senior Cloud Engineer",
-            "company": "Tech Solutions Inc.",
-            "period": "2020 - Present",
-            "skills": ["AWS", "Kubernetes", "Terraform", "Docker"],
+        "sportsmodule": {
+            "jobTitle": "DevOps Engineer",
+            "company": "SportsModule",
+            "period": "2020 - 2021",
+            "skills": ["GitLab CI/CD", "Docker", "Linux Servers", "Ubuntu", "VoIP", "AWS", "BASH Scripting", "Automation on multiple enterprise layers"],
             "projects": ["Cloud Migration Project", "Microservices Architecture"]
         },
-        "company2": {
+        "softserve": {
             "jobTitle": "DevOps Engineer",
-            "company": "Digital Innovations Ltd.",
-            "period": "2017 - 2020",
-            "skills": ["Jenkins", "GitLab CI", "Docker", "AWS"],
-            "projects": ["CI/CD Pipeline Implementation", "Infrastructure Automation"]
+            "company": "SoftServe",
+            "period": "2019 - 2020",
+            "skills": ["Jenkins", "Terraform", "Packer", "Google Cloud", "Hadoop", "AI Platforms", "Package Management with Java (maven)", "Datadog"]
         },
-        "company3": {
-            "jobTitle": "Software Developer",
-            "company": "WebCraft Studios",
-            "period": "2015 - 2017",
-            "skills": ["JavaScript", "React", "Node.js", "Python"],
-            "projects": ["E-commerce Platform", "Mobile App Backend"]
+        "tekexperts": {
+            "jobTitle": "Azure Technical Support Engineer Level II (IaaS)",
+            "company": "TekExperts (Microsoft Vendor)",
+            "period": "2018 - 2019",
+            "skills": ["Azure VMs", "Azure Linux Servers", "WebApps", "Azure Storage", "Azure Networking", "Azure Security", "Azure Monitoring and Logging", "Azure Backup and Recovery", "Azure Active Directory", "Azure DevOps", "Azure CLI and PowerShell", "Troubleshooting and Debugging Azure Services", "BASH Scripting", "Terraform IaC Principles"]
+        },
+        "godaddy": {
+            "jobTitle": "Technical Support",
+            "company": "GoDaddy",
+            "period": "2017 - 2018",
+            "skills": ["Hosting", "Linux Servers", "DNS", "Domains", "Customer Support and Service", "Technical Sales", "cPanel", "WHM", "Plesk", "WordPress", "Email Services", "Simple BASH Scripting", "Basic Networking", "SSL Certificates", "Website Security", "Website Performance Optimization", "Website Migration and Backup", "Website Troubleshooting and Debugging"]
         }
     },
     "projects": [
@@ -98,27 +102,6 @@
         "companiesWorked": 3,
         "certifications": 6
     },
-    "quotes": [
-        "The best way to predict the future is to invent it. - Alan Kay",
-        "Software is a great combination between artistry and engineering. - Bill Gates",
-        "Innovation distinguishes between a leader and a follower. - Steve Jobs",
-        "The only way to do great work is to love what you do. - Steve Jobs",
-        "Technology is best when it brings people together. - Matt Mullenweg"
-    ],
-    "experience": {
-        "summary": "I have over 8 years of professional experience in cloud engineering and DevOps practices. My career has evolved from software development to specializing in cloud infrastructure and automation solutions.",
-        "expertise": [
-            {"area": "Cloud Platforms", "details": "AWS, Azure, GCP"},
-            {"area": "Containerization", "details": "Docker, Kubernetes, K3s, Podman"},
-            {"area": "CI/CD", "details": "Jenkins, GitLab CI, GitHub Actions, CircleCI, ArgoCD, "},
-            {"area": "Infrastructure as Code", "details": "Terraform, Ansible, Cloudformation"},
-            {"area": "Monitoring & Logging", "details": "Prometheus, Grafana, OpenTelemetry, Datadog, Coralogix etc."},
-            {"area": "Programming", "details": "Python, BASH, AI Assisted Programming in Python and JavaScript"},
-            {"area": "Databases and Caching", "details": "PostgreSQL, MySQL, MongoDB, Redis"},
-            {"area": "Networking", "details": "VPC, Subnets, Load Balancers, DNS, VPNs"},
-            {"area": "Security", "details": "IAM, Security Groups, Network Policies, Secrets Management"}
-        ]
-    },
     "certifications": [
         {
             "name": "AWS Cloud Practitioner",
@@ -157,16 +140,16 @@
         {
             "category": "Cloud Platforms",
             "items": [
-                {"name": "AWS", "description": "Advanced knowledge of EC2, S3, Lambda, ECS, EKS"},
-                {"name": "Azure", "description": "Experience with Azure VMs, AKS, Storage Accounts"},
-                {"name": "GCP", "description": "Familiar with GKE, Cloud Functions, BigQuery"}
+                {"name": "AWS", "description": "Advanced knowledge of EC2, S3, Lambda, ECS, EKS", "url": "content/skills/aws.md"},
+                {"name": "Azure", "description": "Experience with Azure VMs, AKS, Storage Accounts", "url": "content/skills/azure.md"},
+                {"name": "GCP", "description": "Familiar with GKE, Cloud Functions, BigQuery", "url": "content/skills/gcp.md"}
             ]
         },
         {
             "category": "Containerization & Orchestration",
             "items": [
-                {"name": "Kubernetes", "description": "Deployment, scaling, networking, security"},
-                {"name": "Docker", "description": "Container creation, image management, Docker Compose"}
+                {"name": "Kubernetes", "description": "Deployment, scaling, networking, security", "url": "content/skills/kubernetes.md"},
+                {"name": "Docker", "description": "Container creation, image management, Docker Compose", "url": "content/skills/docker.md"}
             ]
         }
     ]

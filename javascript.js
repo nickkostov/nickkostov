@@ -46,6 +46,13 @@ function requiredHttpsUrl(value, path) {
     }
 }
 
+function requiredMarkdownUrl(value, path) {
+    requiredString(value, path);
+    if (value.startsWith('/') || value.includes('..') || !value.endsWith('.md')) {
+        throw new Error(`content field ${path} must be a repository-relative Markdown path`);
+    }
+}
+
 function createElement(tagName, className, text) {
     const element = document.createElement(tagName);
     if (className) element.className = className;
@@ -131,7 +138,6 @@ function validateContent(data) {
         );
     });
 
-    validateStringArray(requiredField(root, 'quotes', 'quotes'), 'quotes');
     const certifications = requiredArray(requiredField(root, 'certifications', 'certifications'), 'certifications');
     if (stats.certifications !== certifications.length) {
         throw new Error('content field stats.certifications must equal certifications.length');
@@ -155,14 +161,6 @@ function validateContent(data) {
             }
         });
 
-    const experience = requiredObject(requiredField(root, 'experience', 'experience'), 'experience');
-    requiredString(requiredField(experience, 'summary', 'experience.summary'), 'experience.summary');
-    requiredArray(requiredField(experience, 'expertise', 'experience.expertise'), 'experience.expertise')
-        .forEach((value, index) => {
-            const item = requiredObject(value, `experience.expertise[${index}]`);
-            validateStringFields(item, `experience.expertise[${index}]`, ['area', 'details']);
-        });
-
     requiredArray(requiredField(root, 'skillsDetailed', 'skillsDetailed'), 'skillsDetailed')
         .forEach((value, sectionIndex) => {
             const section = requiredObject(value, `skillsDetailed[${sectionIndex}]`);
@@ -180,6 +178,9 @@ function validateContent(data) {
                     `skillsDetailed[${sectionIndex}].items[${itemIndex}]`,
                     ['name', 'description']
                 );
+                if (item.url !== undefined) {
+                    requiredMarkdownUrl(item.url, `skillsDetailed[${sectionIndex}].items[${itemIndex}].url`);
+                }
             });
         });
 }
@@ -431,22 +432,43 @@ function renderAbout() {
 function renderSkills() {
     const output = document.createDocumentFragment();
     output.appendChild(createTitle('My Skills'));
+    const detailedItems = new Map(
+        contentData.skillsDetailed.flatMap(section => section.items.map(item => [item.name, item]))
+    );
     const grid = createElement('div', 'skills-grid');
     for (const [category, skills] of Object.entries(contentData.skills)) {
         const entry = createElement('div', 'skill-category');
         entry.appendChild(createElement('h3', '', category.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())));
         const list = createElement('ul', 'skill-list');
-        skills.forEach(skill => list.appendChild(createElement('li', '', skill)));
+        skills.forEach(skill => {
+            const item = createElement('li');
+            const detail = detailedItems.get(skill);
+            item.appendChild(detail?.url ? createLink(skill, detail.url, 'skill-link') : document.createTextNode(skill));
+            list.appendChild(item);
+        });
         entry.appendChild(list);
         grid.appendChild(entry);
     }
     output.appendChild(grid);
+
+    output.appendChild(createElement('div', 'command-info skills-detail-intro', 'Detailed skills:'));
+    contentData.skillsDetailed.forEach(section => {
+        const heading = createOutputLine();
+        heading.appendChild(createElement('span', 'command-info', `${section.category}:`));
+        output.appendChild(heading);
+        section.items.forEach(item => {
+            const line = createOutputLine('command-output');
+            const name = item.url ? createLink(`${item.name}:`, item.url, 'command-success') : createElement('span', 'command-success', `${item.name}:`);
+            line.append(name, document.createTextNode(` ${item.description}`));
+            output.appendChild(line);
+        });
+    });
     return output;
 }
 
 function renderCv() {
     const output = document.createDocumentFragment();
-    output.appendChild(createTitle('My Professional Experience'));
+    output.appendChild(createTitle('Curriculum Vitae'));
     for (const job of Object.values(contentData.cv)) {
         const entry = createElement('div', 'cv-entry');
         entry.append(
@@ -464,6 +486,49 @@ function renderCv() {
         entry.appendChild(projects);
         output.appendChild(entry);
     }
+
+    const resumeLine = createElement('div', 'command-output cv-resume-link');
+    const resumeLink = createLink('Download resume', 'resume/resume.pdf', 'command-success');
+    resumeLink.setAttribute('download', '');
+    resumeLine.appendChild(resumeLink);
+    output.appendChild(resumeLine);
+    return output;
+}
+
+function renderPdf() {
+    document.body.classList.add('pdf-mode');
+    const output = document.createDocumentFragment();
+    const exportView = createElement('article', 'pdf-export');
+    const publicContact = createElement('section', 'pdf-contact');
+    publicContact.appendChild(createTitle('Contact'));
+    [
+        ['LinkedIn', contentData.contact.linkedin],
+        ['GitHub', contentData.contact.github],
+        ['Website', contentData.contact.website]
+    ].forEach(([label, url]) => {
+        const line = createElement('div', 'command-output');
+        line.append(createElement('strong', '', `${label}: `), createLink(url, url, 'contact-link'));
+        publicContact.appendChild(line);
+    });
+    exportView.append(
+        createElement('h1', 'pdf-title', contentData.about.name),
+        createElement('p', 'pdf-subtitle', `${contentData.about.title} · ${contentData.about.location}`),
+        renderAbout(),
+        renderSkills(),
+        renderCv(),
+        renderProjects(),
+        renderStats(),
+        renderCertifications(),
+        publicContact
+    );
+
+    const actions = createElement('div', 'pdf-actions');
+    const printButton = createElement('button', 'terminal-action', 'Print / Save as PDF');
+    printButton.type = 'button';
+    printButton.addEventListener('click', () => window.print());
+    actions.appendChild(printButton);
+
+    output.append(exportView, actions);
     return output;
 }
 
@@ -581,13 +646,6 @@ function renderStats() {
     return output;
 }
 
-function renderQuote() {
-    const randomQuote = contentData.quotes[Math.floor(Math.random() * contentData.quotes.length)];
-    const output = document.createDocumentFragment();
-    output.append(createTitle('Inspirational Quote'), createElement('div', 'quote', randomQuote));
-    return output;
-}
-
 function renderHistory() {
     const output = document.createDocumentFragment();
     output.appendChild(createTitle('Command History'));
@@ -598,20 +656,6 @@ function renderHistory() {
         history.textContent = 'No commands executed yet.';
     }
     output.appendChild(history);
-    return output;
-}
-
-function renderExperience() {
-    const output = document.createDocumentFragment();
-    output.append(createTitle('Detailed Experience'), createElement('div', 'command-output', contentData.experience.summary));
-    const areas = createElement('div', 'command-output');
-    areas.appendChild(createElement('strong', '', 'Key Areas of Expertise:'));
-    output.appendChild(areas);
-    contentData.experience.expertise.forEach(item => {
-        const line = createOutputLine();
-        line.append(createElement('span', 'command-success', item.area), document.createTextNode(`: ${item.details}`));
-        output.appendChild(line);
-    });
     return output;
 }
 
@@ -634,59 +678,19 @@ function renderCertifications() {
     return output;
 }
 
-function renderResume() {
-    const output = document.createDocumentFragment();
-    output.appendChild(createTitle('Resume'));
-    const link = createLink('Download resume', 'resume/resume.pdf', 'command-success');
-    link.setAttribute('download', '');
-    output.appendChild(createElement('div', 'command-output'));
-    output.lastChild.appendChild(link);
-    return output;
-}
-
-function renderDetailedSkills() {
-    const output = document.createDocumentFragment();
-    output.appendChild(createTitle('Detailed Skills Breakdown'));
-    contentData.skillsDetailed.forEach(section => {
-        const heading = createOutputLine();
-        heading.appendChild(createElement('span', 'command-info', `${section.category}:`));
-        output.appendChild(heading);
-        section.items.forEach(item => {
-            const line = createOutputLine('command-output');
-            line.append(createElement('span', 'command-success', `${item.name}:`), document.createTextNode(` ${item.description}`));
-            output.appendChild(line);
-        });
-    });
-    return output;
-}
-
-function renderGithub() {
-    const output = document.createDocumentFragment();
-    output.appendChild(createTitle('GitHub'));
-    const link = createLink('Open GitHub profile', contentData.contact.github, 'command-success', true);
-    const line = createElement('div', 'command-output');
-    line.appendChild(link);
-    output.appendChild(line);
-    return output;
-}
-
 const commandRegistry = [
     { name: 'help', aliases: ['ls'], navLabel: 'Help', description: 'Show available commands', execute: renderHelp },
     { name: 'home', aliases: [], navLabel: 'Home', description: 'Show home page', execute: renderHome },
     { name: 'about', aliases: ['whoami'], navLabel: 'About', description: 'About me', execute: renderAbout },
     { name: 'skills', aliases: [], navLabel: 'Skills', description: 'My skills', execute: renderSkills },
-    { name: 'cv', aliases: [], navLabel: 'CV', description: 'My CV experience', execute: renderCv },
+    { name: 'cv', aliases: ['cat resume'], navLabel: 'CV', description: 'CV and resume', execute: renderCv },
+    { name: 'pdf', aliases: [], navLabel: 'PDF', description: 'Print or save CV as PDF', execute: renderPdf },
     { name: 'projects', aliases: [], navLabel: 'Projects', description: 'My projects', execute: renderProjects },
     { name: 'contact', aliases: [], navLabel: 'Contact', description: 'Contact information', execute: renderContact },
     { name: 'clear', aliases: [], description: 'Clear terminal', execute: () => null },
     { name: 'stats', aliases: [], navLabel: 'Stats', description: 'Professional stats', execute: renderStats },
-    { name: 'quote', aliases: [], navLabel: 'Quote', description: 'Inspirational quote', execute: renderQuote },
     { name: 'history', aliases: [], description: 'Command history', execute: renderHistory },
-    { name: 'experience', aliases: [], navLabel: 'Experience', description: 'Detailed experience', execute: renderExperience },
-    { name: 'certifications', aliases: [], navLabel: 'Certifications', description: 'My certifications', execute: renderCertifications },
-    { name: 'resume', aliases: ['cat resume'], navLabel: 'Resume', description: 'Download resume', execute: renderResume },
-    { name: 'skills-detailed', aliases: [], navLabel: 'Skill Details', description: 'Detailed skills breakdown', execute: renderDetailedSkills },
-    { name: 'github', aliases: ['open github'], navLabel: 'GitHub', description: 'Open my GitHub profile', execute: renderGithub }
+    { name: 'certifications', aliases: [], navLabel: 'Certifications', description: 'My certifications', execute: renderCertifications }
 ];
 
 function parseCommandInput(input) {
@@ -745,6 +749,7 @@ function processCommand(input) {
     if (commandText === '') return;
 
     terminalBody.querySelectorAll('.output-line').forEach(line => line.remove());
+    document.body.classList.remove('pdf-mode');
     commandHistory.push(commandText);
     historyIndex = commandHistory.length;
     renderCompletedCommand(commandText);

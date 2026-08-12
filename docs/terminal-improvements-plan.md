@@ -178,7 +178,7 @@ Status: Completed — approved by user on 2026-08-12
 
 - Replace the large command switch with a discoverable command registry.
 - Keep all existing commands.
-- Add terminal-style aliases: `ls`, `whoami`, `cat resume`, and `open github`.
+- Add terminal-style aliases: `ls`, `whoami`, and `cat resume`.
 - Add Tab completion for unambiguous command names and suggestions for multiple matches.
 - Parse the command name case-insensitively without lowercasing arguments.
 - Mask email and phone behind a lightweight in-page human verification check.
@@ -200,7 +200,7 @@ Approval gate: Ask, “Are the commands and completion intuitive, and may I star
 
 Status: Completed — approved by user on 2026-08-12
 
-- Move homepage text, detailed experience, certifications, detailed skills, and quotes into `content/content.json`.
+- Move homepage text, certifications, and detailed skills into `content/content.json`.
 - Remove duplicated CV facts from JavaScript.
 - Validate required content fields before activating the terminal.
 - Generate an accessible alternative navbar from the command registry for non-terminal visitors.

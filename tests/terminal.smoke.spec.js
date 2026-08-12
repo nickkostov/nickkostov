@@ -75,7 +75,7 @@ test('keeps terminal content within a desktop viewport', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await openTerminal(page);
 
-    for (const section of ['Home', 'About', 'Skills', 'CV', 'Projects', 'Contact', 'Stats', 'Certifications']) {
+    for (const section of ['Home', 'About', 'Skills', 'CV', 'PDF', 'Projects', 'Contact', 'Stats', 'Certifications']) {
         await page.getByRole('button', { name: section, exact: true }).click();
         const dimensions = await page.evaluate(() => ({
             pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
@@ -113,16 +113,12 @@ test('opens every main section from the alternative navbar', async ({ page }) =>
         ['Home', cvContent.home.title],
         ['About', 'About Me'],
         ['Skills', 'My Skills'],
-        ['CV', 'My Professional Experience'],
+        ['CV', 'Curriculum Vitae'],
+        ['PDF', 'Print / Save as PDF'],
         ['Projects', 'My Projects'],
         ['Contact', 'Contact Information'],
         ['Stats', 'Professional Statistics'],
-        ['Quote', 'Inspirational Quote'],
-        ['Experience', 'Detailed Experience'],
-        ['Certifications', 'Certifications'],
-        ['Resume', 'Download resume'],
-        ['Skill Details', 'Detailed Skills Breakdown'],
-        ['GitHub', 'Open GitHub profile']
+        ['Certifications', 'Certifications']
     ];
 
     await expect(page.locator('.terminal-nav-button')).toHaveCount(expectedNavigation.length);
@@ -142,9 +138,17 @@ test('runs a known command', async ({ page }) => {
     await runCommand(page, 'help');
 
     await expect(page.locator('#terminalBody')).toContainText('Available commands:');
-    await expect(page.locator('#terminalBody')).toContainText('resume (cat resume) - Download resume');
+    await expect(page.locator('#terminalBody')).toContainText('cv (cat resume) - CV and resume');
     await expect(page.locator('.completed-command')).toContainText('help');
     await expectActivePromptLast(page);
+});
+
+test('does not expose a GitHub command or navigation button', async ({ page }) => {
+    await openTerminal(page);
+    await runCommand(page, 'help');
+
+    await expect(page.getByRole('button', { name: 'GitHub', exact: true })).toHaveCount(0);
+    await expect(page.locator('#terminalBody')).not.toContainText('github -');
 });
 
 test('reports an unknown command', async ({ page }) => {
@@ -169,14 +173,35 @@ test('clear restores one empty focused input', async ({ page }) => {
     await expectActivePromptLast(page);
 });
 
-test('resume command exposes the PDF download', async ({ page }) => {
+test('CV command exposes the work history and PDF download', async ({ page }) => {
     await openTerminal(page);
-    await runCommand(page, 'resume');
+    await runCommand(page, 'cv');
 
     const downloadLink = page.getByRole('link', { name: 'Download resume' });
     await expect(downloadLink).toHaveAttribute('href', 'resume/resume.pdf');
     await expect(downloadLink).toHaveAttribute('download', '');
     await expectActivePromptLast(page);
+});
+
+test('pdf command builds a printable CV and opens the print dialog', async ({ page }) => {
+    await page.addInitScript(() => {
+        window.print = () => {
+            document.body.dataset.printRequested = 'true';
+        };
+    });
+    await openTerminal(page);
+    await runCommand(page, 'pdf');
+
+    await expect(page.locator('.pdf-export')).toContainText(cvContent.about.name);
+    await expect(page.locator('.pdf-export')).toContainText(Object.values(cvContent.cv)[0].company);
+    await expect(page.locator('.pdf-export')).toContainText('Certifications');
+    await expect(page.locator('.pdf-contact')).toContainText(cvContent.contact.github);
+    await page.getByRole('button', { name: 'Print / Save as PDF' }).click();
+    await expect(page.locator('body')).toHaveAttribute('data-print-requested', 'true');
+
+    await page.emulateMedia({ media: 'print' });
+    await expect(page.locator('.terminal-header')).toBeHidden();
+    await expect(page.locator('.pdf-export')).toBeVisible();
 });
 
 test('keeps only the latest transcript before the active prompt', async ({ page }) => {
@@ -210,9 +235,8 @@ test('preserves command history navigation', async ({ page }) => {
 test('runs every registered command and generates matching help entries', async ({ page }) => {
     await openTerminal(page);
     const commands = [
-        'help', 'home', 'about', 'skills', 'cv', 'projects', 'contact', 'stats',
-        'quote', 'history', 'experience', 'certifications', 'resume',
-        'skills-detailed', 'github'
+        'help', 'home', 'about', 'skills', 'cv', 'pdf', 'projects', 'contact', 'stats',
+        'history', 'certifications'
     ];
 
     await runCommand(page, 'help');
@@ -250,9 +274,14 @@ test('renders every CV content section from content.json', async ({ page }) => {
 
     await runCommand(page, 'skills');
     await expect(page.locator('#terminalBody')).toContainText(Object.values(cvContent.skills)[0][0]);
+    await expect(page.locator('#terminalBody')).toContainText(cvContent.skillsDetailed[0].category);
+    await expect(page.locator('#terminalBody')).toContainText(cvContent.skillsDetailed[0].items[0].description);
+    await expect(page.locator('.skill-link[href="content/skills/aws.md"]')).toHaveCount(1);
+    await expect(page.locator('.command-success[href="content/skills/aws.md"]')).toHaveCount(1);
 
     await runCommand(page, 'cv');
     await expect(page.locator('#terminalBody')).toContainText(Object.values(cvContent.cv)[0].company);
+    await expect(page.getByRole('link', { name: 'Download resume' })).toBeVisible();
 
     await runCommand(page, 'projects');
     await expect(page.locator('#terminalBody')).toContainText(cvContent.projects[0].name);
@@ -263,19 +292,9 @@ test('renders every CV content section from content.json', async ({ page }) => {
     await runCommand(page, 'stats');
     await expect(page.locator('#terminalBody')).toContainText(String(cvContent.stats.experienceYears));
 
-    await runCommand(page, 'quote');
-    await expect(page.locator('.quote')).toHaveText(cvContent.quotes[0]);
-
-    await runCommand(page, 'experience');
-    await expect(page.locator('#terminalBody')).toContainText(cvContent.experience.summary);
-    await expect(page.locator('#terminalBody')).toContainText(cvContent.experience.expertise[0].details);
-
     await runCommand(page, 'certifications');
     await expect(page.locator('#terminalBody')).toContainText(cvContent.certifications[0].name);
 
-    await runCommand(page, 'skills-detailed');
-    await expect(page.locator('#terminalBody')).toContainText(cvContent.skillsDetailed[0].category);
-    await expect(page.locator('#terminalBody')).toContainText(cvContent.skillsDetailed[0].items[0].description);
 });
 
 test('links every certification to its credential', async ({ page }) => {
@@ -308,11 +327,6 @@ test('supports terminal-style command aliases', async ({ page }) => {
     await runCommand(page, 'cat resume');
     await expect(page.getByRole('link', { name: 'Download resume' })).toBeVisible();
 
-    await runCommand(page, 'open github');
-    await expect(page.getByRole('link', { name: 'Open GitHub profile' })).toHaveAttribute(
-        'href',
-        httpsUrl(cvContent.contact.github)
-    );
 });
 
 test('masks private contact coordinates behind a human check', async ({ page }) => {
@@ -429,7 +443,7 @@ test('Tab suggests multiple matches without changing the input', async ({ page }
     await input.press('Tab');
 
     await expect(input).toHaveValue('s');
-    await expect(page.locator('.completion-output')).toHaveText('skills  skills-detailed  stats');
+    await expect(page.locator('.completion-output')).toHaveText('skills  stats');
     await expectActivePromptLast(page);
 });
 
@@ -651,6 +665,22 @@ test('rejects a non-HTTPS certification credential URL', async ({ page }) => {
 
     await expect(page.locator('#startupStatus')).toHaveText(
         'Initialization failed: content field certifications[0].credentialUrl must be a valid HTTPS URL. Refresh to try again.'
+    );
+    await expect(page.locator('#commandInput')).toBeDisabled();
+});
+
+test('rejects an unsafe skill Markdown path', async ({ page }) => {
+    await page.route('**/content/content.json', async route => {
+        const response = await route.fetch();
+        const body = await response.json();
+        body.skillsDetailed[0].items[0].url = '../private.md';
+        await route.fulfill({ response, json: body });
+    });
+
+    await page.goto('/');
+
+    await expect(page.locator('#startupStatus')).toHaveText(
+        'Initialization failed: content field skillsDetailed[0].items[0].url must be a repository-relative Markdown path. Refresh to try again.'
     );
     await expect(page.locator('#commandInput')).toBeDisabled();
 });

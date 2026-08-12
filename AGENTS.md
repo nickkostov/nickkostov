@@ -47,7 +47,7 @@ The smoke-test script owns the Compose lifecycle and removes its test container/
 
 Edit `content/content.json` for CV changes. Do not duplicate CV facts in JavaScript or HTML.
 
-Required top-level sections are `home`, `about`, `skills`, `cv`, `projects`, `contact`, `stats`, `quotes`, `experience`, `certifications`, and `skillsDetailed`. Browser startup validates the complete schema before enabling terminal or navbar interaction.
+Required top-level sections are `home`, `about`, `skills`, `cv`, `projects`, `contact`, `stats`, `certifications`, and `skillsDetailed`. Browser startup validates the complete schema before enabling terminal or navbar interaction.
 
 Important content rules:
 
@@ -61,9 +61,9 @@ Important content rules:
 
 Canonical commands are defined in `commandRegistry` in `javascript.js`:
 
-`help`, `home`, `about`, `skills`, `cv`, `projects`, `contact`, `clear`, `stats`, `quote`, `history`, `experience`, `certifications`, `resume`, `skills-detailed`, and `github`.
+`help`, `home`, `about`, `skills`, `cv`, `pdf`, `projects`, `contact`, `clear`, `stats`, `history`, and `certifications`.
 
-Aliases are `ls`, `whoami`, `cat resume`, and `open github`.
+Aliases are `ls`, `whoami`, and `cat resume`.
 
 When adding or changing a command:
 

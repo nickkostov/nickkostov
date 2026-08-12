@@ -1,0 +1,22 @@
+{
+  "prompt": "Merge Skill Details and Skills, and hyperlink skills to repository Markdown files.",
+  "output": "Merged the compact and detailed skill views into one skills command and navigation button. Removed the skills-detailed command/button and stale references. Added optional validated repository-relative Markdown URLs to detailed skill records, linked AWS, Azure, GCP, Kubernetes, and Docker to content/skills/*.md, and added tests for merged rendering and unsafe paths. Final validation: 42 Playwright tests passed; JavaScript, JSON, and whitespace checks passed.",
+  "files_changed": [
+    "javascript.js",
+    "content/content.json",
+    "content/skills/aws.md",
+    "content/skills/azure.md",
+    "content/skills/gcp.md",
+    "content/skills/kubernetes.md",
+    "content/skills/docker.md",
+    "style.css",
+    "tests/terminal.smoke.spec.js",
+    "AGENTS.md",
+    "docs/architecture.md",
+    "docs/how-to/update-cv-content.md",
+    "context-cache.md",
+    "cmd-log/2026-08-12-merge-skills.md",
+    "codex-changelog/2026-08-12-merge-skills.json"
+  ],
+  "sensitive_data": "none"
+}

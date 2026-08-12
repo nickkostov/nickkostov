@@ -392,6 +392,21 @@ body::after {
     left: 0;
 }
 
+.skill-link {
+    color: var(--terminal-cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.skill-link:hover,
+.skill-link:focus-visible {
+    color: var(--terminal-yellow);
+}
+
+.skills-detail-intro {
+    margin-top: 18px;
+}
+
 .cv-entry {
     margin-bottom: 14px;
     padding: 0 0 12px 12px;
@@ -675,5 +690,105 @@ body::after {
     .build-version {
         display: block;
         margin: 3px 0 0;
+    }
+}
+
+@media print {
+    @page {
+        margin: 14mm;
+    }
+
+    body {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        background: #fff;
+        color: #111;
+    }
+
+    body::after,
+    .terminal-header,
+    .terminal-nav,
+    .terminal-footer {
+        display: none !important;
+    }
+
+    .terminal-body {
+        display: block;
+        height: auto;
+        min-height: 0;
+        padding: 0;
+        overflow: visible;
+        color: #111;
+        text-shadow: none;
+    }
+
+    .terminal-body > * {
+        display: none !important;
+    }
+
+    .terminal-body > .output-line:has(.pdf-export) {
+        display: block !important;
+        margin: 0;
+    }
+
+    .pdf-export {
+        display: block;
+        color: #111;
+        font-family: Arial, sans-serif;
+        line-height: 1.35;
+    }
+
+    .pdf-export .command-title,
+    .pdf-export .bio-heading,
+    .pdf-export .cv-entry h3,
+    .pdf-export .project-card h3,
+    .pdf-export .stat-card .value {
+        color: #111;
+        text-shadow: none;
+    }
+
+    .pdf-export .command-title::before,
+    .pdf-export .bio-heading::before,
+    .pdf-export .skill-list li::before,
+    .pdf-export .cv-entry .skills-list li::before,
+    .pdf-export .cv-entry .projects-list li::before,
+    .pdf-export .project-card .tech-stack span::before,
+    .pdf-export .project-card .tech-stack span::after {
+        color: #555;
+    }
+
+    .pdf-export .command-output,
+    .pdf-export .bio-paragraph,
+    .pdf-export .bio-detail,
+    .pdf-export .date,
+    .pdf-export .stat-card .label,
+    .pdf-export .cert-meta {
+        color: #222;
+    }
+
+    .pdf-export .command-success,
+    .pdf-export .command-info,
+    .pdf-export .bio-stage,
+    .pdf-export .skill-link,
+    .pdf-export .cert-link {
+        color: #0645ad;
+    }
+
+    .pdf-export .terminal-action,
+    .pdf-export .pdf-actions,
+    .pdf-actions {
+        display: none !important;
+    }
+
+    .pdf-title {
+        margin-bottom: 2px;
+        font-size: 25px;
+    }
+
+    .pdf-subtitle {
+        margin-bottom: 18px;
+        color: #444;
+        font-size: 13px;
     }
 }
