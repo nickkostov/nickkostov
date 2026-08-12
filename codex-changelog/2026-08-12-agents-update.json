@@ -1,0 +1,10 @@
+{
+  "prompt": "Update the AGENTS.md file",
+  "output": "Replaced the stale project overview with current guidance for Docker Compose, the registry-driven terminal and navbar, structured and validated CV content, security and interaction invariants, linked certifications, contact-verification limitations, Playwright testing, documentation records, checkpoint approvals, and minimum validation. Preserved the existing rtk and safety requirements.",
+  "files_changed": [
+    "AGENTS.md",
+    "cmd-log/2026-08-12-agents-update.md",
+    "codex-changelog/2026-08-12-agents-update.json"
+  ],
+  "sensitive_data": "none"
+}
