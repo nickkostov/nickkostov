@@ -14,6 +14,8 @@ The build creates a temporary `_site` directory containing only:
 
 Repository documentation, tests, command logs, changelogs, and development configuration are not included in the public Pages artifact.
 
+Run `npm run test:pages` from the repository root to verify the same required runtime file set locally. The Pages workflow runs this check before uploading the artifact.
+
 ## Enable Pages
 
 1. Open the repository on GitHub.

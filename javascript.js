@@ -1,28 +1,5 @@
 let contentData = null;
 
-function escapeHtml(value) {
-    return String(value)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-}
-
-function escapeContentTree(value) {
-    if (Array.isArray(value)) {
-        return value.map(escapeContentTree);
-    }
-
-    if (value && typeof value === 'object') {
-        return Object.fromEntries(
-            Object.entries(value).map(([key, item]) => [escapeHtml(key), escapeContentTree(item)])
-        );
-    }
-
-    return typeof value === 'string' ? escapeHtml(value) : value;
-}
-
 function requiredField(parent, key, path) {
     if (!parent || !Object.prototype.hasOwnProperty.call(parent, key)) {
         throw new Error(`content is missing required field: ${path}`);
@@ -69,6 +46,31 @@ function requiredHttpsUrl(value, path) {
     }
 }
 
+function createElement(tagName, className, text) {
+    const element = document.createElement(tagName);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+}
+
+function createOutputLine(className = '') {
+    return createElement('div', `output-line${className ? ` ${className}` : ''}`);
+}
+
+function createTitle(text) {
+    return createElement('div', 'command-title', text);
+}
+
+function createLink(text, href, className = 'contact-link', newTab = false) {
+    const link = createElement('a', className, text);
+    link.href = href;
+    if (newTab) {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+    return link;
+}
+
 function validateStringFields(object, path, fields) {
     fields.forEach(field => {
         requiredString(requiredField(object, field, `${path}.${field}`), `${path}.${field}`);
@@ -96,6 +98,9 @@ function validateContent(data) {
 
     const contact = requiredObject(requiredField(root, 'contact', 'contact'), 'contact');
     validateStringFields(contact, 'contact', ['email', 'phone', 'linkedin', 'github', 'website']);
+    ['linkedin', 'github', 'website'].forEach(field => {
+        requiredHttpsUrl(contact[field], `contact.${field}`);
+    });
 
     const stats = requiredObject(requiredField(root, 'stats', 'stats'), 'stats');
     ['experienceYears', 'projectsCompleted', 'companiesWorked', 'certifications'].forEach(field => {
@@ -127,7 +132,11 @@ function validateContent(data) {
     });
 
     validateStringArray(requiredField(root, 'quotes', 'quotes'), 'quotes');
-    requiredArray(requiredField(root, 'certifications', 'certifications'), 'certifications')
+    const certifications = requiredArray(requiredField(root, 'certifications', 'certifications'), 'certifications');
+    if (stats.certifications !== certifications.length) {
+        throw new Error('content field stats.certifications must equal certifications.length');
+    }
+    certifications
         .forEach((value, index) => {
             const certification = requiredObject(value, `certifications[${index}]`);
             requiredString(
@@ -197,7 +206,7 @@ async function loadContentData() {
     }
 
     validateContent(rawContent);
-    contentData = escapeContentTree(rawContent);
+    contentData = rawContent;
 }
 
 // DOM elements
@@ -269,7 +278,7 @@ async function initializeTerminal() {
 
     try {
         await loadContentData();
-        bannerIdentity.innerHTML = `${contentData.about.name} // ${contentData.about.title} // ${contentData.about.location}`;
+        bannerIdentity.textContent = `${contentData.about.name} // ${contentData.about.title} // ${contentData.about.location}`;
         setStartupStatus("Terminal initialized. Type 'help' for available commands.", 'command-output');
         originalCommandInput.disabled = false;
         setNavigationDisabled(false);
@@ -354,202 +363,171 @@ function initTerminal() {
 }
 
 function renderHelp() {
-    const entries = commandRegistry.map(command => {
-        const aliases = command.aliases.length > 0
-            ? ` <span class="command-info">(${command.aliases.map(escapeHtml).join(', ')})</span>`
-            : '';
-        return `<div class="output-line"><span class="command-success">${escapeHtml(command.name)}</span>${aliases} - ${escapeHtml(command.description)}</div>`;
-    }).join('');
-
-    return `
-        <div class="command-info">Available commands:</div>
-        ${entries}
-    `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createElement('div', 'command-info', 'Available commands:'));
+    commandRegistry.forEach(command => {
+        const entry = createOutputLine();
+        entry.appendChild(createElement('span', 'command-success', command.name));
+        if (command.aliases.length > 0) {
+            entry.appendChild(document.createTextNode(` (${command.aliases.join(', ')})`));
+        }
+        entry.appendChild(document.createTextNode(` - ${command.description}`));
+        output.appendChild(entry);
+    });
+    return output;
 }
 
 function renderHome() {
-    return `
-                <div class="command-title">${contentData.home.title}</div>
-                <div class="command-output">
-                    ${contentData.home.intro}
-                </div>
-                <div class="command-output">
-                    ${contentData.home.summary}
-                </div>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle(contentData.home.title));
+    output.appendChild(createElement('div', 'command-output', contentData.home.intro));
+    output.appendChild(createElement('div', 'command-output', contentData.home.summary));
+    return output;
 }
 
 function renderAbout() {
-    const story = contentData.about.story.map(paragraph => `
-        <p class="bio-paragraph">${paragraph}</p>
-    `).join('');
-    const journey = contentData.about.journey.map((item, index) => `
-        <li>
-            <span class="bio-step">${String(index + 1).padStart(2, '0')}</span>
-            <span class="bio-stage">${item.stage}</span>
-            <span class="bio-detail">${item.detail}</span>
-        </li>
-    `).join('');
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('About Me'));
 
-    return `
-                <div class="command-title">About Me</div>
-                <div class="bio-identity">
-                    <div><span class="bio-label">name</span>${contentData.about.name}</div>
-                    <div><span class="bio-label">role</span>${contentData.about.title}</div>
-                    <div><span class="bio-label">location</span>${contentData.about.location}</div>
-                </div>
-                <div class="bio-section">
-                    <div class="bio-heading">Profile</div>
-                    <p class="bio-paragraph">${contentData.about.summary}</p>
-                </div>
-                <div class="bio-section">
-                    <div class="bio-heading">My path into technology</div>
-                    ${story}
-                </div>
-                <div class="bio-section">
-                    <div class="bio-heading">Journey</div>
-                    <ol class="bio-journey">${journey}</ol>
-                </div>
-                <div class="bio-section bio-motivation">
-                    <div class="bio-heading">What drives me</div>
-                    <p class="bio-paragraph">${contentData.about.motivation}</p>
-                </div>
-            `;
+    const identity = createElement('div', 'bio-identity');
+    [['name', contentData.about.name], ['role', contentData.about.title], ['location', contentData.about.location]]
+        .forEach(([label, value]) => {
+            const row = createElement('div');
+            row.append(createElement('span', 'bio-label', label), document.createTextNode(value));
+            identity.appendChild(row);
+        });
+    output.appendChild(identity);
+
+    const profile = createElement('div', 'bio-section');
+    profile.append(createElement('div', 'bio-heading', 'Profile'), createElement('p', 'bio-paragraph', contentData.about.summary));
+    output.appendChild(profile);
+
+    const story = createElement('div', 'bio-section');
+    story.appendChild(createElement('div', 'bio-heading', 'My path into technology'));
+    contentData.about.story.forEach(paragraph => story.appendChild(createElement('p', 'bio-paragraph', paragraph)));
+    output.appendChild(story);
+
+    const journey = createElement('div', 'bio-section');
+    journey.appendChild(createElement('div', 'bio-heading', 'Journey'));
+    const journeyList = createElement('ol', 'bio-journey');
+    contentData.about.journey.forEach((item, index) => {
+        const row = createElement('li');
+        row.append(
+            createElement('span', 'bio-step', String(index + 1).padStart(2, '0')),
+            createElement('span', 'bio-stage', item.stage),
+            createElement('span', 'bio-detail', item.detail)
+        );
+        journeyList.appendChild(row);
+    });
+    journey.appendChild(journeyList);
+    output.appendChild(journey);
+
+    const motivation = createElement('div', 'bio-section bio-motivation');
+    motivation.append(createElement('div', 'bio-heading', 'What drives me'), createElement('p', 'bio-paragraph', contentData.about.motivation));
+    output.appendChild(motivation);
+    return output;
 }
 
 function renderSkills() {
-    let output = `
-                <div class="command-title">My Skills</div>
-                <div class="skills-grid">
-            `;
-            
-            for (const [category, skills] of Object.entries(contentData.skills)) {
-                output += `
-                    <div class="skill-category">
-                        <h3>${category.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</h3>
-                        <ul class="skill-list">
-                `;
-                
-                skills.forEach(skill => {
-                    output += `<li>${skill}</li>`;
-                });
-                
-                output += `
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            output += `
-                </div>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('My Skills'));
+    const grid = createElement('div', 'skills-grid');
+    for (const [category, skills] of Object.entries(contentData.skills)) {
+        const entry = createElement('div', 'skill-category');
+        entry.appendChild(createElement('h3', '', category.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())));
+        const list = createElement('ul', 'skill-list');
+        skills.forEach(skill => list.appendChild(createElement('li', '', skill)));
+        entry.appendChild(list);
+        grid.appendChild(entry);
+    }
+    output.appendChild(grid);
     return output;
 }
 
 function renderCv() {
-    let output = `
-                <div class="command-title">My Professional Experience</div>
-            `;
-            
-            for (const [key, job] of Object.entries(contentData.cv)) {
-                output += `
-                    <div class="cv-entry">
-                        <h3>${job.company}</h3>
-                        <div class="job-title">${job.jobTitle}</div>
-                        <div class="date">${job.period}</div>
-                        <div><strong>Skills:</strong></div>
-                        <ul class="skills-list">
-                `;
-                
-                job.skills.forEach(skill => {
-                    output += `<li>${skill}</li>`;
-                });
-                
-                output += `
-                        </ul>
-                        <div><strong>Projects:</strong></div>
-                        <ul class="projects-list">
-                `;
-                
-                job.projects.forEach(project => {
-                    output += `<li>${project}</li>`;
-                });
-                
-                output += `
-                        </ul>
-                    </div>
-                `;
-            }
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('My Professional Experience'));
+    for (const job of Object.values(contentData.cv)) {
+        const entry = createElement('div', 'cv-entry');
+        entry.append(
+            createElement('h3', '', job.company),
+            createElement('div', 'job-title', job.jobTitle),
+            createElement('div', 'date', job.period),
+            createElement('div', '', 'Skills:')
+        );
+        const skills = createElement('ul', 'skills-list');
+        job.skills.forEach(skill => skills.appendChild(createElement('li', '', skill)));
+        entry.appendChild(skills);
+        entry.appendChild(createElement('div', '', 'Projects:'));
+        const projects = createElement('ul', 'projects-list');
+        job.projects.forEach(project => projects.appendChild(createElement('li', '', project)));
+        entry.appendChild(projects);
+        output.appendChild(entry);
+    }
     return output;
 }
 
 function renderProjects() {
-    let output = `
-                <div class="command-title">My Projects</div>
-                <div class="projects-grid">
-            `;
-            
-            contentData.projects.forEach(project => {
-                output += `
-                    <div class="project-card">
-                        <h3>${project.name}</h3>
-                        <p>${project.description}</p>
-                        <div class="tech-stack">
-                            ${project.technologies.map(tech => `<span>${tech}</span>`).join('')}
-                        </div>
-                        <div class="date">${project.period}</div>
-                    </div>
-                `;
-            });
-            
-            output += `
-                </div>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('My Projects'));
+    const grid = createElement('div', 'projects-grid');
+    contentData.projects.forEach(project => {
+        const card = createElement('div', 'project-card');
+        card.append(createElement('h3', '', project.name), createElement('p', '', project.description));
+        const technologies = createElement('div', 'tech-stack');
+        project.technologies.forEach(technology => technologies.appendChild(createElement('span', '', technology)));
+        card.append(technologies, createElement('div', 'date', project.period));
+        grid.appendChild(card);
+    });
+    output.appendChild(grid);
     return output;
 }
 
 function renderContact() {
     const emailHref = `mailto:${contentData.contact.email}`;
     const phoneHref = `tel:${contentData.contact.phone.replace(/[^\d+]/g, '')}`;
-    const linkedInHref = `https://${contentData.contact.linkedin.replace(/^https?:\/\//i, '')}`;
-    const githubHref = `https://${contentData.contact.github.replace(/^https?:\/\//i, '')}`;
-    const websiteHref = `https://${contentData.contact.website.replace(/^https?:\/\//i, '')}`;
-    const privateContact = contactVerified
-        ? {
-            email: `<a class="contact-link" href="${emailHref}">${contentData.contact.email}</a>`,
-            phone: `<a class="contact-link" href="${phoneHref}">${contentData.contact.phone}</a>`
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('Contact Information'));
+    const list = createElement('ul', 'contact-list');
+    const contacts = [
+        ['📧', 'Email', contactVerified ? createLink(contentData.contact.email, emailHref) : createElement('span', 'contact-private', 'hidden')],
+        ['📞', 'Phone', contactVerified ? createLink(contentData.contact.phone, phoneHref) : createElement('span', 'contact-private', 'hidden')],
+        ['💼', 'LinkedIn', createLink(contentData.contact.linkedin, contentData.contact.linkedin, 'contact-link', true)],
+        ['🐙', 'GitHub', createLink(contentData.contact.github, contentData.contact.github, 'contact-link', true)],
+        ['🌐', 'Website', createLink(contentData.contact.website, contentData.contact.website, 'contact-link', true)]
+    ];
+    contacts.forEach(([icon, label, value]) => {
+        const item = createElement('li');
+        const iconElement = createElement('span', 'contact-icon', icon);
+        iconElement.setAttribute('aria-hidden', 'true');
+        const detail = createElement('span');
+        detail.append(createElement('span', 'contact-label', `${label}: `), value);
+        item.append(iconElement, detail);
+        if (!contactVerified && (label === 'Email' || label === 'Phone')) {
+            value.dataset.contactField = label.toLowerCase();
         }
-        : {
-            email: '<span class="contact-private" data-contact-field="email">hidden</span>',
-            phone: '<span class="contact-private" data-contact-field="phone">hidden</span>'
-        };
+        list.appendChild(item);
+    });
+    output.appendChild(list);
 
-    let verification = '';
     if (!contactVerified) {
         const left = Math.floor(Math.random() * 8) + 2;
         const right = Math.floor(Math.random() * 8) + 2;
         contactChallenge = { left, right, answer: left + right };
-        verification = `
-            <form class="contact-verification">
-                <label for="contactChallenge">Verify you're human: ${left} + ${right} =</label>
-                <input id="contactChallenge" class="verification-input" inputmode="numeric" autocomplete="off" required>
-                <button class="terminal-action" type="submit">Reveal email &amp; phone</button>
-                <span class="verification-status" role="status"></span>
-            </form>
-        `;
+        const form = createElement('form', 'contact-verification');
+        form.appendChild(createElement('label', '', `Verify you're human: ${left} + ${right} =`));
+        const input = createElement('input', 'verification-input');
+        input.id = 'contactChallenge';
+        input.inputMode = 'numeric';
+        input.autocomplete = 'off';
+        input.required = true;
+        const button = createElement('button', 'terminal-action', 'Reveal email & phone');
+        button.type = 'submit';
+        form.append(input, button, createElement('span', 'verification-status'));
+        form.querySelector('.verification-status').setAttribute('role', 'status');
+        output.appendChild(form);
     }
-
-    return `
-                <div class="command-title">Contact Information</div>
-                <ul class="contact-list">
-                    <li><span class="contact-icon" aria-hidden="true">📧</span><span><span class="contact-label">Email:</span> ${privateContact.email}</span></li>
-                    <li><span class="contact-icon" aria-hidden="true">📞</span><span><span class="contact-label">Phone:</span> ${privateContact.phone}</span></li>
-                    <li><span class="contact-icon" aria-hidden="true">💼</span><span><span class="contact-label">LinkedIn:</span> <a class="contact-link" href="${linkedInHref}" target="_blank" rel="noopener noreferrer">${contentData.contact.linkedin}</a></span></li>
-                    <li><span class="contact-icon" aria-hidden="true">🐙</span><span><span class="contact-label">GitHub:</span> <a class="contact-link" href="${githubHref}" target="_blank" rel="noopener noreferrer">${contentData.contact.github}</a></span></li>
-                    <li><span class="contact-icon" aria-hidden="true">🌐</span><span><span class="contact-label">Website:</span> <a class="contact-link" href="${websiteHref}" target="_blank" rel="noopener noreferrer">${contentData.contact.website}</a></span></li>
-                </ul>
-                ${verification}
-            `;
+    return output;
 }
 
 function verifyContactChallenge(form) {
@@ -590,116 +568,106 @@ function verifyContactChallenge(form) {
 }
 
 function renderStats() {
-    return `
-                <div class="command-title">Professional Statistics</div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="value">${contentData.stats.experienceYears}</div>
-                        <div class="label">Years Experience</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value">${contentData.stats.projectsCompleted}</div>
-                        <div class="label">Projects Completed</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value">${contentData.stats.companiesWorked}</div>
-                        <div class="label">Companies Worked</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value">${contentData.stats.certifications}</div>
-                        <div class="label">Certifications</div>
-                    </div>
-                </div>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('Professional Statistics'));
+    const grid = createElement('div', 'stats-grid');
+    [['experienceYears', 'Years Experience'], ['projectsCompleted', 'Projects Completed'], ['companiesWorked', 'Companies Worked'], ['certifications', 'Certifications']]
+        .forEach(([key, label]) => {
+            const card = createElement('div', 'stat-card');
+            card.append(createElement('div', 'value', String(contentData.stats[key])), createElement('div', 'label', label));
+            grid.appendChild(card);
+        });
+    output.appendChild(grid);
+    return output;
 }
 
 function renderQuote() {
     const randomQuote = contentData.quotes[Math.floor(Math.random() * contentData.quotes.length)];
-    return `
-                <div class="command-title">Inspirational Quote</div>
-                <div class="quote">${randomQuote}</div>
-            `;
+    const output = document.createDocumentFragment();
+    output.append(createTitle('Inspirational Quote'), createElement('div', 'quote', randomQuote));
+    return output;
 }
 
 function renderHistory() {
-    return `
-                <div class="command-title">Command History</div>
-                <div class="command-output">
-                    ${commandHistory.length > 0 ? 
-                        commandHistory.map((cmd, index) => `<div>${index + 1}. ${escapeHtml(cmd)}</div>`).join('') : 
-                        'No commands executed yet.'}
-                </div>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('Command History'));
+    const history = createElement('div', 'command-output');
+    if (commandHistory.length > 0) {
+        commandHistory.forEach((command, index) => history.appendChild(createElement('div', '', `${index + 1}. ${command}`)));
+    } else {
+        history.textContent = 'No commands executed yet.';
+    }
+    output.appendChild(history);
+    return output;
 }
 
 function renderExperience() {
-    const expertise = contentData.experience.expertise.map(item => `
-        <div class="output-line"><span class="command-success">${item.area}</span>: ${item.details}</div>
-    `).join('');
-
-    return `
-                <div class="command-title">Detailed Experience</div>
-                <div class="command-output">
-                    ${contentData.experience.summary}
-                </div>
-                <div class="command-output">
-                    <strong>Key Areas of Expertise:</strong>
-                </div>
-                ${expertise}
-            `;
+    const output = document.createDocumentFragment();
+    output.append(createTitle('Detailed Experience'), createElement('div', 'command-output', contentData.experience.summary));
+    const areas = createElement('div', 'command-output');
+    areas.appendChild(createElement('strong', '', 'Key Areas of Expertise:'));
+    output.appendChild(areas);
+    contentData.experience.expertise.forEach(item => {
+        const line = createOutputLine();
+        line.append(createElement('span', 'command-success', item.area), document.createTextNode(`: ${item.details}`));
+        output.appendChild(line);
+    });
+    return output;
 }
 
 function renderCertifications() {
-    const certifications = contentData.certifications.map(certification => `
-        <li>
-            <span class="cert-marker" aria-hidden="true">✓</span>
-            <span class="cert-content">
-                <a class="cert-link" href="${certification.credentialUrl}" target="_blank" rel="noopener noreferrer">${certification.name}</a>
-                ${certification.credentialId ? `<span class="cert-meta">credential id: ${certification.credentialId}</span>` : ''}
-                ${certification.status ? `<span class="cert-status">${certification.status}</span>` : ''}
-            </span>
-        </li>
-    `).join('');
-
-    return `
-                <div class="command-title">Certifications</div>
-                <ul class="cert-list">${certifications}</ul>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('Certifications'));
+    const list = createElement('ul', 'cert-list');
+    contentData.certifications.forEach(certification => {
+        const item = createElement('li');
+        const marker = createElement('span', 'cert-marker', '✓');
+        marker.setAttribute('aria-hidden', 'true');
+        const content = createElement('span', 'cert-content');
+        content.appendChild(createLink(certification.name, certification.credentialUrl, 'cert-link', true));
+        if (certification.credentialId) content.appendChild(createElement('span', 'cert-meta', `credential id: ${certification.credentialId}`));
+        if (certification.status) content.appendChild(createElement('span', 'cert-status', certification.status));
+        item.append(marker, content);
+        list.appendChild(item);
+    });
+    output.appendChild(list);
+    return output;
 }
 
 function renderResume() {
-    return `
-                <div class="command-title">Resume</div>
-                <div class="command-output">
-                    <a class="command-success" href="resume/resume.pdf" download>Download resume</a>
-                </div>
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('Resume'));
+    const link = createLink('Download resume', 'resume/resume.pdf', 'command-success');
+    link.setAttribute('download', '');
+    output.appendChild(createElement('div', 'command-output'));
+    output.lastChild.appendChild(link);
+    return output;
 }
 
 function renderDetailedSkills() {
-    const sections = contentData.skillsDetailed.map(section => `
-        <div class="output-line"><span class="command-info">${section.category}:</span></div>
-        ${section.items.map(item => `
-            <div class="output-line command-output">
-                <span class="command-success">${item.name}:</span> ${item.description}
-            </div>
-        `).join('')}
-    `).join('');
-
-    return `
-                <div class="command-title">Detailed Skills Breakdown</div>
-                ${sections}
-            `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('Detailed Skills Breakdown'));
+    contentData.skillsDetailed.forEach(section => {
+        const heading = createOutputLine();
+        heading.appendChild(createElement('span', 'command-info', `${section.category}:`));
+        output.appendChild(heading);
+        section.items.forEach(item => {
+            const line = createOutputLine('command-output');
+            line.append(createElement('span', 'command-success', `${item.name}:`), document.createTextNode(` ${item.description}`));
+            output.appendChild(line);
+        });
+    });
+    return output;
 }
 
 function renderGithub() {
-    const githubUrl = `https://${contentData.contact.github.replace(/^https?:\/\//i, '')}`;
-    return `
-        <div class="command-title">GitHub</div>
-        <div class="command-output">
-            <a class="command-success" href="${githubUrl}" target="_blank" rel="noopener noreferrer">Open GitHub profile</a>
-        </div>
-    `;
+    const output = document.createDocumentFragment();
+    output.appendChild(createTitle('GitHub'));
+    const link = createLink('Open GitHub profile', contentData.contact.github, 'command-success', true);
+    const line = createElement('div', 'command-output');
+    line.appendChild(link);
+    output.appendChild(line);
+    return output;
 }
 
 const commandRegistry = [
@@ -783,9 +751,12 @@ function processCommand(input) {
 
     const parsed = parseCommandInput(commandText);
     if (!parsed.command) {
-        const outputLine = document.createElement('div');
-        outputLine.className = 'output-line';
-        outputLine.innerHTML = `<div class="command-error">Command not found: ${escapeHtml(commandText)}. Type 'help' for available commands.</div>`;
+        const outputLine = createOutputLine();
+        outputLine.appendChild(createElement(
+            'div',
+            'command-error',
+            `Command not found: ${commandText}. Type 'help' for available commands.`
+        ));
         terminalBody.insertBefore(outputLine, activePrompt);
         originalCommandInput.focus();
         terminalBody.scrollTop = terminalBody.scrollHeight;
@@ -799,9 +770,10 @@ function processCommand(input) {
 
     setActiveNavigation(parsed.command.name);
     const output = parsed.command.execute(parsed.args);
-    const outputLine = document.createElement('div');
-    outputLine.className = 'output-line';
-    outputLine.innerHTML = output;
+    const outputLine = createOutputLine();
+    outputLine.setAttribute('aria-live', 'polite');
+    outputLine.setAttribute('aria-label', `Output for ${commandText}`);
+    outputLine.appendChild(output);
     terminalBody.insertBefore(outputLine, activePrompt);
     originalCommandInput.focus();
     terminalBody.scrollTop = terminalBody.scrollHeight;

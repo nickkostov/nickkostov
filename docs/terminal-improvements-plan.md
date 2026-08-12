@@ -220,7 +220,7 @@ Approval gate: Ask, “Is the displayed CV content correct, and may I start Chec
 
 ## Checkpoint 9 — Visual terminal polish
 
-Status: In progress — awaiting automated and user verification
+Status: In progress — implementation and automated verification updated; awaiting user verification
 
 - Replace dashboard-like cards with compact terminal-oriented text and aligned lists.
 - Add a restrained startup banner and subtle optional glow/scanline treatment.
@@ -242,7 +242,7 @@ Approval gate: Ask, “Does the visual design feel right on desktop and mobile, 
 
 ## Checkpoint 10 — Accessibility and final verification
 
-Status: Pending
+Status: In progress — implementation and automated verification updated; awaiting user verification
 
 - Add an accessible label and terminal semantics for the command input and output region.
 - Announce command output without repeatedly reading the entire transcript.

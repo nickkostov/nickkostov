@@ -71,6 +71,41 @@ test('keeps terminal content within a narrow mobile viewport', async ({ page }) 
     expect(navigationScrolls).toBe(true);
 });
 
+test('keeps terminal content within a desktop viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await openTerminal(page);
+
+    for (const section of ['Home', 'About', 'Skills', 'CV', 'Projects', 'Contact', 'Stats', 'Certifications']) {
+        await page.getByRole('button', { name: section, exact: true }).click();
+        const dimensions = await page.evaluate(() => ({
+            pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+            bodyOverflow: document.body.scrollWidth > document.body.clientWidth
+        }));
+        expect(dimensions.pageOverflow || dimensions.bodyOverflow).toBe(false);
+    }
+});
+
+test('exposes terminal semantics and honors reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await openTerminal(page);
+
+    await expect(page.locator('#terminalBody')).toHaveAttribute('role', 'log');
+    await expect(page.locator('#terminalBody')).toHaveAttribute('aria-live', 'off');
+    await expect(page.locator('#commandInput')).toHaveAccessibleName('Terminal command');
+    await runCommand(page, 'home');
+    await expect(page.locator('#terminalBody > .output-line[aria-live="polite"]')).toHaveAttribute(
+        'aria-label',
+        'Output for home'
+    );
+
+    const motion = await page.locator('body').evaluate(element => {
+        const styles = getComputedStyle(element);
+        return { animationDuration: styles.animationDuration, transitionDuration: styles.transitionDuration };
+    });
+    expect(Number.parseFloat(motion.animationDuration)).toBeLessThanOrEqual(0.001);
+    expect(Number.parseFloat(motion.transitionDuration)).toBeLessThanOrEqual(0.001);
+});
+
 test('opens every main section from the alternative navbar', async ({ page }) => {
     await openTerminal(page);
     const expectedNavigation = [
@@ -258,7 +293,7 @@ test('links every certification to its credential', async ({ page }) => {
     }
 
     await expect(page.locator('.cert-meta')).toContainText('9QJ69W0BEF41QVG2');
-    await expect(page.locator('.cert-status')).toHaveText('No longer supported');
+    await expect(page.getByText('No longer supported', { exact: true })).toHaveCount(1);
 });
 
 test('supports terminal-style command aliases', async ({ page }) => {
@@ -334,6 +369,22 @@ test('reveals email and phone after a correct human check', async ({ page }) => 
         'href',
         `tel:${cvContent.contact.phone.replace(/[^\d+]/g, '')}`
     );
+    await expect(page.locator('#commandInput')).toBeFocused();
+});
+
+test('supports keyboard navigation through contact verification', async ({ page }) => {
+    await openTerminal(page);
+    await runCommand(page, 'contact');
+
+    const verificationInput = page.locator('.verification-input');
+    const prompt = await page.locator('.contact-verification label').textContent();
+    const operands = prompt.match(/(\d+) \+ (\d+)/).slice(1).map(Number);
+    await verificationInput.fill(String(operands[0] + operands[1]));
+    await verificationInput.press('Tab');
+    await expect(page.getByRole('button', { name: 'Reveal email & phone' })).toBeFocused();
+    await page.keyboard.press('Enter');
+
+    await expect(page.locator('.contact-verification')).toHaveCount(0);
     await expect(page.locator('#commandInput')).toBeFocused();
 });
 
@@ -569,6 +620,24 @@ test('reports an incorrectly typed content field', async ({ page }) => {
     );
     await expect(page.locator('#commandInput')).toBeDisabled();
 });
+
+for (const field of ['linkedin', 'github', 'website']) {
+    test(`rejects a malformed contact URL: ${field}`, async ({ page }) => {
+        await page.route('**/content/content.json', async route => {
+            const response = await route.fetch();
+            const body = await response.json();
+            body.contact[field] = 'not-a-url';
+            await route.fulfill({ response, json: body });
+        });
+
+        await page.goto('/');
+
+        await expect(page.locator('#startupStatus')).toHaveText(
+            `Initialization failed: content field contact.${field} must be a valid HTTPS URL. Refresh to try again.`
+        );
+        await expect(page.locator('#commandInput')).toBeDisabled();
+    });
+}
 
 test('rejects a non-HTTPS certification credential URL', async ({ page }) => {
     await page.route('**/content/content.json', async route => {

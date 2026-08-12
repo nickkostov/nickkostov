@@ -23,7 +23,7 @@
         <div class="terminal-nav-list" id="terminalNav"></div>
     </nav>
     
-    <div class="terminal-body" id="terminalBody">
+    <div class="terminal-body" id="terminalBody" role="log" aria-label="Terminal transcript" aria-live="off">
         <div class="output-line terminal-banner" id="startupBanner">
             <div><span class="banner-border">┌─[</span><span class="banner-host">nickkostov.bg</span><span class="banner-border">]</span></div>
             <div><span class="banner-border">│</span> <span id="bannerIdentity">loading profile...</span></div>
@@ -37,7 +37,7 @@
             <span class="prompt-host">@nickkostov.bg:</span>
             <span class="prompt-path">~</span>
             <span class="prompt-symbol">$</span>
-            <input type="text" class="command-input" id="commandInput" disabled>
+            <input type="text" class="command-input" id="commandInput" aria-label="Terminal command" autocomplete="off" spellcheck="false" disabled>
         </div>
     </div>
     

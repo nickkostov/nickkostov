@@ -23,6 +23,9 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Verify Pages artifact contents
+        run: sh scripts/verify-pages-artifact.sh
+
       - name: Stage website
         run: |
           mkdir _site

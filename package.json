@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test:setup": "playwright install chromium",
-    "test:smoke": "sh scripts/test-smoke.sh"
+    "test:smoke": "sh scripts/test-smoke.sh",
+    "test:pages": "sh scripts/verify-pages-artifact.sh"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1"
