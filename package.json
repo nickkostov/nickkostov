@@ -1,0 +1,12 @@
+{
+  "name": "nickkostov-digital-cv",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test:setup": "playwright install chromium",
+    "test:smoke": "sh scripts/test-smoke.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

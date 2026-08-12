@@ -1,8 +1,0 @@
-<div class="terminal-live">
-    {% assign commands = include.lines | split: '\n' %}
-    <div class="terminal-box">
-      <div class="terminal-body" data-lines='{{ include.lines | strip_newlines | replace: "'", "&apos;" }}' data-output='{{ include.output | strip_newlines | replace: "'", "&apos;" }}'>
-      </div>
-    </div>
-  </div>
-  

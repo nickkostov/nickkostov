@@ -1,0 +1,14 @@
+services:
+  cv:
+    build:
+      context: .
+    ports:
+      - "${CV_PORT:-8090}:80"
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--output-document=/dev/null", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3

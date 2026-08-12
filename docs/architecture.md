@@ -1,0 +1,33 @@
+# Architecture
+
+The project is a static digital CV served by Nginx. The browser loads `index.html`, `style.css`, and `javascript.js`; the JavaScript fetches CV data from `content/content.json` and exposes the interactive terminal commands. The downloadable resume is stored at `resume/resume.pdf`.
+
+For local verification, `Dockerfile` packages these static assets into `nginx:1.27-alpine`. `compose.yaml` publishes the container's port 80 on host port 8090 by default, supports overriding it with `CV_PORT`, and checks the root page with Nginx's bundled `wget`. Port 8090 avoids the local UniFi OS Server service that occupies port 8080.
+
+The local `nginx.conf` disables browser caching for served assets. This keeps rebuilt HTML, JavaScript, styles, and CV data consistent during checkpoint verification.
+
+During incremental verification, the HTML also uses versioned JavaScript and CSS URLs and displays a build marker in the footer. This makes stale browser tabs distinguishable from the currently running checkpoint.
+
+Playwright smoke tests in `tests/` exercise the application through Chromium against the Compose-hosted site. `scripts/test-smoke.sh` owns the test environment lifecycle so containers and networks are removed after success or failure.
+
+The browser starts with command input disabled while `content/content.json` is loading. Successful loading activates and focuses the prompt. Network failures, non-success HTTP responses, and malformed JSON leave input disabled and render a terminal-style initialization error.
+
+Before activation, the browser validates required objects, arrays, strings, and numeric fields across the complete CV schema. Missing fields and incorrect types produce a path-specific initialization error and leave input disabled. All CV facts—including home text, quotes, detailed experience, certifications, and detailed skills—live in `content/content.json`; JavaScript supplies only rendering and interaction behavior.
+
+The terminal keeps one active prompt as the final child of the transcript. Submitting a command clears the previous transcript, inserts a completed prompt and its output before the active prompt, and returns focus to the same native input. Command history remains available through the Up and Down arrow keys.
+
+Submitted command text is created with DOM text nodes. Strings loaded from `content/content.json` are HTML-escaped before they enter the trusted command templates, and command history and unknown-command errors escape entered text. This prevents markup-like content from becoming executable DOM.
+
+The input handler owns only terminal-specific shortcuts: Ctrl+C cancels pending input and prints `^C`, while Ctrl+L clears the transcript. Both preserve the single focused active prompt; unrelated Ctrl shortcuts are not prevented.
+
+Commands are defined in a single registry containing each canonical name, aliases, description, and execution function. The `help` output is generated from this registry. Input parsing matches command names and aliases case-insensitively while retaining the original argument text and command-history casing. Terminal-style aliases include `ls`, `whoami`, `cat resume`, and `open github`. Tab completes an unambiguous command or alias and prints sorted suggestions when several entries match.
+
+The same registry generates an accessible horizontal navigation bar for visitors who do not want to type commands. Navigation buttons remain disabled until content validation succeeds, execute the identical command handlers, identify the current section with `aria-current`, and retain keyboard focus after activation.
+
+The visual layer uses only local HTML/CSS assets. A compact dynamic startup banner reads identity data from the validated JSON, and restrained scanlines and text glow provide terminal character without animation. Skills, projects, work entries, and statistics use aligned terminal rows and separators rather than dashboard cards. The navigation scrolls within its own region on narrow screens while output and prompts wrap without causing page-level horizontal overflow.
+
+The biography is modeled as structured content: identity, profile summary, narrative paragraphs, career journey stages, and motivation. The `about` renderer presents this as terminal-oriented sections and a numbered journey, with responsive stacking on narrow screens. Education wording distinguishes graduation from Darbi College, one year of study at HAN University of Applied Sciences, and the subsequent move into server work; it does not claim a completed university degree.
+
+Certifications are structured records with a display name and required HTTPS credential URL plus optional credential ID and status. The renderer opens credentials in a new tab with `noopener noreferrer`, displays the AWS verification ID, and flags the CircleCI credential as no longer supported. Startup validation rejects missing or non-HTTPS credential links.
+
+The `contact` command presents the five contact coordinates as a compact labeled list with a distinct emoji marker for each contact method. LinkedIn, GitHub, and Website are HTTPS links. Email and phone are masked until the visitor solves a small randomized arithmetic check, then become `mailto:` and `tel:` links; successful verification persists only until the page reloads. This is a user-interface privacy deterrent, not bot-proof protection: the static browser application still fetches those values from `content/content.json`.

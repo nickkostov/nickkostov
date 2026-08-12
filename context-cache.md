@@ -1,0 +1,14 @@
+# Goal
+Interactive browser-based digital CV that behaves and reads like an actual terminal, with a downloadable PDF resume and a containerized local verification path.
+
+# Stack
+Static HTML, CSS, and vanilla JavaScript served by Nginx in Docker. CV data is loaded from `content/content.json`; resume asset is `resume/resume.pdf`; Font Awesome is loaded from cdnjs. Compose publishes port 8090 by default with `CV_PORT` override support.
+
+# Files
+`index.html` is the shell. `javascript.js` owns schema validation, registry-driven terminal/navbar navigation, aliases, completion, history, rendering, and resume link; CV facts live only in `content/content.json`. `style.css` provides a local-only terminal theme, compact content rows, scanlines, and responsive layout. `Dockerfile` and `compose.yaml` serve locally. Playwright smoke tests live in `tests/`; `docs/architecture.md` and `docs/how-to/` document operation. `prmt-log/` is absent.
+
+# Rules
+Prefix every shell command with `rtk`. Log commands in `cmd-log/`. Save prompts and outputs in `codex-changelog/`. Keep reviews read-only unless implementation is requested. Keep documentation under `docs/` when documentation is added.
+
+# Decisions
+The active prompt remains last; preserve native caret and latest-command transcript clearing. JSON is escaped and schema-validated before terminal/navbar activation. Commands, aliases, help, and navbar are registry-driven. About uses structured story/journey data; Darbi College is completed, HAN Biomedical Sciences was one year without a degree, followed by server work. Certifications are HTTPS credential links with optional ID/status; CircleCI is flagged unsupported. Contact public URLs are clickable; email/phone reveal after a session-only arithmetic check, not bot-proof because JSON remains public. No external visual assets remain. Compose defaults to 8090. Checkpoints 0-5, 7, 8 approved; 6 deferred, 9 in progress. Wait for approval after each checkpoint.

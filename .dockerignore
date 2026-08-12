@@ -1,0 +1,9 @@
+.git
+.gitignore
+.DS_Store
+cmd-log
+codex-changelog
+context-cache.md
+docs
+node_modules
+prmt-log
