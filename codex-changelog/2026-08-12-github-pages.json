@@ -1,0 +1,14 @@
+{
+  "prompt": "Generate a workflow that will upload this to github pages.",
+  "output": "Added a GitHub Actions workflow that stages only public static runtime assets, uploads them directly as a GitHub Pages artifact, and deploys pushes to master or manual runs. No Jekyll build or .nojekyll marker is used. Documented setup, architecture, and repository context.",
+  "files_changed": [
+    ".github/workflows/pages.yml",
+    "docs/how-to/deploy-github-pages.md",
+    "docs/architecture.md",
+    "AGENTS.md",
+    "context-cache.md",
+    "cmd-log/2026-08-12-github-pages.md",
+    "codex-changelog/2026-08-12-github-pages.json"
+  ],
+  "sensitive_data": "none"
+}

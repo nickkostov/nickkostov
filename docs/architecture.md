@@ -2,6 +2,8 @@
 
 The project is a static digital CV served by Nginx. The browser loads `index.html`, `style.css`, and `javascript.js`; the JavaScript fetches CV data from `content/content.json` and exposes the interactive terminal commands. The downloadable resume is stored at `resume/resume.pdf`.
 
+GitHub Pages is the production publishing path. `.github/workflows/pages.yml` runs on pushes to `master` or by manual dispatch, stages only the runtime website files in `_site`, uploads that directory as a Pages artifact, and deploys it through the protected `github-pages` environment. Development files, documentation, tests, and task logs are excluded from the published artifact.
+
 For local verification, `Dockerfile` packages these static assets into `nginx:1.27-alpine`. `compose.yaml` publishes the container's port 80 on host port 8090 by default, supports overriding it with `CV_PORT`, and checks the root page with Nginx's bundled `wget`. Port 8090 avoids the local UniFi OS Server service that occupies port 8080.
 
 The local `nginx.conf` disables browser caching for served assets. This keeps rebuilt HTML, JavaScript, styles, and CV data consistent during checkpoint verification.
