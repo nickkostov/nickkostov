@@ -4,45 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nikolay Kostov - Digital CV</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=cp9-aws-link-20260812">
 </head>
 <body>
     <div class="terminal-header">
         <div class="terminal-title">
-            <i class="fas fa-terminal"></i>
-            <span>nikolay-kostov-cv</span>
+            <span class="terminal-logo" aria-hidden="true">&gt;_</span>
+            <span>nickkostov.bg</span>
         </div>
-        <div class="terminal-controls">
+        <div class="terminal-controls" aria-hidden="true">
             <div class="control-btn close"></div>
             <div class="control-btn minimize"></div>
             <div class="control-btn maximize"></div>
         </div>
     </div>
+
+    <nav class="terminal-nav" aria-label="CV sections">
+        <div class="terminal-nav-list" id="terminalNav"></div>
+    </nav>
     
     <div class="terminal-body" id="terminalBody">
-        <div class="output-line command-output">
-            Welcome to Nikolay Kostov's Digital CV Terminal
+        <div class="output-line terminal-banner" id="startupBanner">
+            <div><span class="banner-border">┌─[</span><span class="banner-host">nickkostov.bg</span><span class="banner-border">]</span></div>
+            <div><span class="banner-border">│</span> <span id="bannerIdentity">loading profile...</span></div>
+            <div><span class="banner-border">└─</span> use the navigation or type <span class="command-success">help</span></div>
         </div>
-        <div class="output-line command-output">
-            Type 'help' to see available commands
+        <div class="output-line command-info" id="startupStatus">
+            initializing...
         </div>
-        <div class="prompt-line">
-            <span class="prompt-user">nikolay.kostov</span>
-            <span class="prompt-host">@nikolay-kostov-cv</span>
+        <div class="prompt-line active-prompt" id="activePrompt">
+            <span class="prompt-user">visitor</span>
+            <span class="prompt-host">@nickkostov.bg:</span>
             <span class="prompt-path">~</span>
             <span class="prompt-symbol">$</span>
-        </div>
-        <div class="input-line">
-            <input type="text" class="command-input" id="commandInput" autofocus>
+            <input type="text" class="command-input" id="commandInput" disabled>
         </div>
     </div>
     
     <div class="terminal-footer">
-        <div>Nikolay Kostov - Digital CV Terminal</div>
-        <div>Press Ctrl+C to exit</div>
+        <div>Nikolay Kostov - Digital CV Terminal <span class="build-version" id="buildVersion">build: cp9-aws-link-20260812</span></div>
+        <div>Tab complete · Ctrl+C cancel · Ctrl+L clear</div>
     </div>
 
-    <script src="javascript.js"></script>
+    <script src="javascript.js?v=cp9-aws-link-20260812"></script>
 </body>
 </html>

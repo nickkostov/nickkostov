@@ -1,4 +1,9 @@
 {
+    "home": {
+        "title": "Welcome to My Digital CV Terminal",
+        "intro": "This terminal provides an interactive way to explore my professional background. Type 'help' to see available commands.",
+        "summary": "I'm a Senior Cloud Engineer with expertise in cloud platforms, container orchestration, and DevOps practices. This terminal showcases my skills and experience in an interactive way."
+    },
     "skills": {
         "cloud": ["AWS", "Azure", "GCP"],
         "containerOrchestrators": ["Docker", "Podman", "Kubernetes"],
@@ -53,21 +58,116 @@
     "about": {
         "name": "Nikolay Kostov",
         "title": "Senior Cloud Engineer & DevOps Specialist",
-        "description": "Passionate cloud engineer with over 8 years of experience in building scalable, reliable systems. Specialized in cloud infrastructure, container orchestration, and DevOps practices.",
-        "education": "MSc in Computer Science, University of Sofia",
-        "location": "Sofia, Bulgaria"
+        "location": "Sofia, Bulgaria",
+        "summary": "Cloud engineer with over 8 years of experience building scalable, reliable systems, specializing in cloud infrastructure, container orchestration, and DevOps practices.",
+        "story": [
+            "My path into Information Technology did not begin with a traditional Computer Science education. I graduated from Darbi College Sofia, where I specialized in Physics, Chemistry and Biology.",
+            "I later studied Biomedical Sciences at HAN University of Applied Sciences for one year. I left the program to begin working with servers and pursue a practical career in technology.",
+            "Through the years, I became fascinated by how quickly technology progresses. I found it difficult to concentrate on a field that did not evolve at the same pace, which drew me toward Information Technology and the constant learning it requires."
+        ],
+        "journey": [
+            {
+                "stage": "Foundation",
+                "detail": "Graduated from Darbi College Sofia with a focus on Physics, Chemistry and Biology."
+            },
+            {
+                "stage": "Biomedical Sciences",
+                "detail": "Studied at HAN University of Applied Sciences for one year."
+            },
+            {
+                "stage": "Infrastructure",
+                "detail": "Left university to work with servers and build practical experience in Information Technology."
+            },
+            {
+                "stage": "Current focus",
+                "detail": "Cloud infrastructure, container orchestration, automation, reliability, and DevOps practices."
+            }
+        ],
+        "motivation": "Technology never stands still. That pace of progress—and the need to keep learning, adapting, and improving—is what keeps me engaged in this field."
     },
     "contact": {
-        "email": "nikolay.kostov@example.com",
-        "phone": "+359 123 456 789",
-        "linkedin": "linkedin.com/in/nikolaykostov",
-        "github": "github.com/nikolaykostov",
-        "website": "nikolay-kostov.dev"
+        "email": "try me on linkedin",
+        "phone": "+359 870 00 0000",
+        "linkedin": "https://linkedin.com/in/nickkostov",
+        "github": "https://github.com/nickkostov",
+        "website": "https://nickkostov.bg"
     },
     "stats": {
         "experienceYears": 8,
         "projectsCompleted": 25,
         "companiesWorked": 3,
-        "certifications": 5
-    }
+        "certifications": 6
+    },
+    "quotes": [
+        "The best way to predict the future is to invent it. - Alan Kay",
+        "Software is a great combination between artistry and engineering. - Bill Gates",
+        "Innovation distinguishes between a leader and a follower. - Steve Jobs",
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "Technology is best when it brings people together. - Matt Mullenweg"
+    ],
+    "experience": {
+        "summary": "I have over 8 years of professional experience in cloud engineering and DevOps practices. My career has evolved from software development to specializing in cloud infrastructure and automation solutions.",
+        "expertise": [
+            {"area": "Cloud Platforms", "details": "AWS, Azure, GCP"},
+            {"area": "Containerization", "details": "Docker, Kubernetes, K3s, Podman"},
+            {"area": "CI/CD", "details": "Jenkins, GitLab CI, GitHub Actions, CircleCI, ArgoCD, "},
+            {"area": "Infrastructure as Code", "details": "Terraform, Ansible, Cloudformation"},
+            {"area": "Monitoring & Logging", "details": "Prometheus, Grafana, OpenTelemetry, Datadog, Coralogix etc."},
+            {"area": "Programming", "details": "Python, BASH, AI Assisted Programming in Python and JavaScript"},
+            {"area": "Databases and Caching", "details": "PostgreSQL, MySQL, MongoDB, Redis"},
+            {"area": "Networking", "details": "VPC, Subnets, Load Balancers, DNS, VPNs"},
+            {"area": "Security", "details": "IAM, Security Groups, Network Policies, Secrets Management"}
+        ]
+    },
+    "certifications": [
+        {
+            "name": "AWS Cloud Practitioner",
+            "credentialUrl": "https://cp.certmetrics.com/amazon/en/public/verify/credential/9QJ69W0BEF41QVG2",
+            "status": "Expired",
+            "credentialId": "9QJ69W0BEF41QVG2"
+
+        },
+        {
+            "name": "CircleCI Associate Developer",
+            "credentialUrl": "https://verify.skilljar.com/c/r5o25g7rjsgi",
+            "status": "No longer supported"
+        },
+        {
+            "name": "HashiCorp Certified: Terraform Associate (002)",
+            "status": "Expired",
+            "credentialUrl": "https://www.credly.com/badges/d75f227b-0542-4a1f-ae7d-9b0773c325ef/public_url"
+        },
+        {
+            "name": "Linux Professional Institute (LPI) Certification",
+            "credentialUrl": "https://cs.lpi.org/caf/Xamman/certification/verify/LPI000500897/44ghhwvhup",
+            "status": "Lifetime"
+        },
+        {
+            "name": "DPN Support Specialist Certification",
+            "credentialUrl": "https://datadog.docebosaas.com/share/gamification/badges/external/bdbe559e-91d5-4285-814c-cec62f7d71bb?lang=en",
+            "status": "Lifetime"
+        },
+        {
+            "name": "DPN Technical Specialist Certification",
+            "credentialUrl": "https://datadog.docebosaas.com/share/gamification/badges/external/d10bf409-b373-4d84-b797-04b10c14d6e2?lang=en",
+            "status": "Lifetime"
+        }
+    ],
+    "skillsDetailed": [
+        {
+            "category": "Cloud Platforms",
+            "items": [
+                {"name": "AWS", "description": "Advanced knowledge of EC2, S3, Lambda, ECS, EKS"},
+                {"name": "Azure", "description": "Experience with Azure VMs, AKS, Storage Accounts"},
+                {"name": "GCP", "description": "Familiar with GKE, Cloud Functions, BigQuery"}
+            ]
+        },
+        {
+            "category": "Containerization & Orchestration",
+            "items": [
+                {"name": "Kubernetes", "description": "Deployment, scaling, networking, security"},
+                {"name": "Docker", "description": "Container creation, image management, Docker Compose"}
+            ]
+        }
+    ]
 }

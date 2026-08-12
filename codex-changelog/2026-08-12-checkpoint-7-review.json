@@ -1,0 +1,18 @@
+{
+  "prompt": "Review and improve Checkpoint 7: correct GitHub, use emoji contact markers, hide email and phone behind human verification, fix unblurring, and make contact URLs clickable.",
+  "output": "Reopened Checkpoint 7 after user review. Public contact coordinates now render as HTTPS links, while verified email and phone reveal as mailto and tel links. Existing masking, emoji markers, aliases, completion, and safe rendering remain covered by browser tests.",
+  "files_changed": [
+    "cmd-log/2026-08-12-terminal-improvements-plan.md",
+    "codex-changelog/2026-08-12-checkpoint-7-review.json",
+    "content/content.json",
+    "index.html",
+    "javascript.js",
+    "style.css",
+    "docs/architecture.md",
+    "docs/how-to/contact-verification.md",
+    "docs/terminal-improvements-plan.md",
+    "context-cache.md",
+    "tests/terminal.smoke.spec.js"
+  ],
+  "sensitive_data": "none"
+}
