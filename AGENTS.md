@@ -35,6 +35,7 @@ The smoke-test script owns the Compose lifecycle and removes its test container/
 - `content/content.json` — the single source of truth for all displayed CV facts.
 - `resume/resume.pdf` — downloadable resume.
 - `Dockerfile`, `compose.yaml`, `nginx.conf` — reproducible local Nginx environment with no-cache development responses and health checking.
+- `.github/workflows/pages.yml` — production GitHub Pages artifact build and deployment from `master`.
 - `tests/terminal.smoke.spec.js` — Playwright browser regressions.
 - `scripts/test-smoke.sh` — Compose-backed browser-test runner.
 - `docs/architecture.md` — current system design.
