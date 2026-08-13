@@ -13,6 +13,20 @@
         "frameworks": ["React", "Node.js", "Express", "Django"]
     },
     "cv": {
+        "endava": {
+            "jobTitle": "Senior DevOps Engineer",
+            "company": "Endava",
+            "period": "2024 - present",
+            "skills": ["AWS", "GitLab CI/CD", "GitHub Actions", "Kubernetes", "Docker", "Linux", "Enterprise Automations and Support", "BASH and Python Scripting", "Datadog"],
+            "projects": ["Cloud to Cloud Migrations", "Microservices Architecture", "Digital Transformation", "Observability and Monitoring", ""]
+        },
+        "cbtw": {
+            "jobTitle": "Senior DevOps Engineer | Part of AWS Owners",
+            "company": "CBTW | Positive Thinking Company",
+            "period": "2021 - 2024",
+            "skills": ["AWS", "GCP", "Azure", "Circle CI", "GitLab CI/CD", "Kubernetes", "Docker", "Linux", "Enterprise Automations and Support", "BASH and Python Scripting", "Datadog"],
+            "projects": ["Cloud to Cloud Migrations", "MIcroservices Architecture", "Digital Transformation", "Observability and Monitoring", "Oranization Management and Support"]
+        },
         "sportsmodule": {
             "jobTitle": "DevOps Engineer",
             "company": "SportsModule",
