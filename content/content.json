@@ -18,7 +18,7 @@
             "company": "Endava",
             "period": "2024 - present",
             "skills": ["AWS", "GitLab CI/CD", "GitHub Actions", "Kubernetes", "Docker", "Linux", "Enterprise Automations and Support", "BASH and Python Scripting", "Datadog"],
-            "projects": ["Cloud to Cloud Migrations", "Microservices Architecture", "Digital Transformation", "Observability and Monitoring", ""]
+            "projects": ["Cloud to Cloud Migrations", "Microservices Architecture", "Digital Transformation", "Observability and Monitoring"]
         },
         "cbtw": {
             "jobTitle": "Senior DevOps Engineer | Part of AWS Owners",

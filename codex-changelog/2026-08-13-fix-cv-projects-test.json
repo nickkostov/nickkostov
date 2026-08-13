@@ -1,0 +1,10 @@
+{
+  "date": "2026-08-13",
+  "task": "Fix the optional CV projects regression assertion",
+  "changes": [
+    "Updated the test to inspect the SportsModule entry whose projects field is removed by the fixture."
+  ],
+  "validation": [
+    "Full Compose-backed Playwright smoke suite passed"
+  ]
+}

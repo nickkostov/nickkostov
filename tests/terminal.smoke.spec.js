@@ -634,7 +634,7 @@ test('allows CV jobs without project details', async ({ page }) => {
     await runCommand(page, 'cv');
 
     await expect(page.locator('#commandInput')).toBeEnabled();
-    await expect(page.locator('.cv-entry').first()).not.toContainText('Projects:');
+    await expect(page.locator('.cv-entry').filter({ hasText: 'SportsModule' })).not.toContainText('Projects:');
 });
 
 test('reports an incorrectly typed content field', async ({ page }) => {
