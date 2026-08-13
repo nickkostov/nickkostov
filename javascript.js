@@ -126,7 +126,9 @@ function validateContent(data) {
         const job = requiredObject(value, `cv.${key}`);
         validateStringFields(job, `cv.${key}`, ['jobTitle', 'company', 'period']);
         validateStringArray(requiredField(job, 'skills', `cv.${key}.skills`), `cv.${key}.skills`);
-        validateStringArray(requiredField(job, 'projects', `cv.${key}.projects`), `cv.${key}.projects`);
+        if (job.projects !== undefined) {
+            validateStringArray(job.projects, `cv.${key}.projects`);
+        }
     });
 
     requiredArray(requiredField(root, 'projects', 'projects'), 'projects').forEach((value, index) => {
@@ -480,10 +482,12 @@ function renderCv() {
         const skills = createElement('ul', 'skills-list');
         job.skills.forEach(skill => skills.appendChild(createElement('li', '', skill)));
         entry.appendChild(skills);
-        entry.appendChild(createElement('div', '', 'Projects:'));
-        const projects = createElement('ul', 'projects-list');
-        job.projects.forEach(project => projects.appendChild(createElement('li', '', project)));
-        entry.appendChild(projects);
+        if (job.projects?.length) {
+            entry.appendChild(createElement('div', '', 'Projects:'));
+            const projects = createElement('ul', 'projects-list');
+            job.projects.forEach(project => projects.appendChild(createElement('li', '', project)));
+            entry.appendChild(projects);
+        }
         output.appendChild(entry);
     }
 
@@ -523,6 +527,7 @@ function renderPdf() {
     );
 
     const actions = createElement('div', 'pdf-actions');
+    actions.appendChild(createElement('p', 'pdf-instructions', 'For terminal colors in the PDF, enable “Background graphics” in the browser print options.'));
     const printButton = createElement('button', 'terminal-action', 'Print / Save as PDF');
     printButton.type = 'button';
     printButton.addEventListener('click', () => window.print());

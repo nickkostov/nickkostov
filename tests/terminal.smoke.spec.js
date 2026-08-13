@@ -619,6 +619,21 @@ test('reports a missing required content field', async ({ page }) => {
     await expect(page.locator('#commandInput')).toBeDisabled();
 });
 
+test('allows CV jobs without project details', async ({ page }) => {
+    await page.route('**/content/content.json', async route => {
+        const response = await route.fetch();
+        const body = await response.json();
+        delete body.cv.sportsmodule.projects;
+        await route.fulfill({ response, json: body });
+    });
+
+    await openTerminal(page);
+    await runCommand(page, 'cv');
+
+    await expect(page.locator('#commandInput')).toBeEnabled();
+    await expect(page.locator('.cv-entry').first()).not.toContainText('Projects:');
+});
+
 test('reports an incorrectly typed content field', async ({ page }) => {
     await page.route('**/content/content.json', async route => {
         const response = await route.fetch();

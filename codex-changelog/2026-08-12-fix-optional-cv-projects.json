@@ -1,0 +1,14 @@
+{
+  "prompt": "Initialization failed: content is missing required field: cv.softserve.projects. Refresh to try again.",
+  "output": "Fixed startup failure by making CV job projects optional. Jobs without project details now validate successfully and omit the Projects subsection instead of requiring fabricated content. Added a regression test for a job without projects. Final validation: 44 Playwright tests passed; Pages artifact, JavaScript, JSON, and whitespace checks passed.",
+  "files_changed": [
+    "javascript.js",
+    "tests/terminal.smoke.spec.js",
+    "AGENTS.md",
+    "docs/architecture.md",
+    "docs/how-to/update-cv-content.md",
+    "cmd-log/2026-08-12-fix-optional-cv-projects.md",
+    "codex-changelog/2026-08-12-fix-optional-cv-projects.json"
+  ],
+  "sensitive_data": "none"
+}

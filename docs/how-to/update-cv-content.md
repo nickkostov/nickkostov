@@ -10,6 +10,8 @@ Skill details are displayed together with `skills`. Add an optional `url` to a `
 
 Keep the existing JSON structure and value types. Required text must be non-empty, list sections must remain non-empty arrays, and statistics must be numbers. On invalid content, the website keeps the terminal input disabled and displays the exact failing field path.
 
+CV job entries may omit `projects` when there are no project details to show; the projects subsection is omitted for that job.
+
 Validate changes from the repository root:
 
 ```sh

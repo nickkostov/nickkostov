@@ -696,14 +696,17 @@ body::after {
 @media print {
     @page {
         margin: 14mm;
+        size: auto;
     }
 
     body {
         height: auto;
         min-height: 0;
         overflow: visible;
-        background: #fff;
-        color: #111;
+        background: var(--terminal-bg);
+        color: var(--terminal-green);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 
     body::after,
@@ -719,7 +722,8 @@ body::after {
         min-height: 0;
         padding: 0;
         overflow: visible;
-        color: #111;
+        color: var(--terminal-green);
+        background: var(--terminal-bg);
         text-shadow: none;
     }
 
@@ -734,9 +738,14 @@ body::after {
 
     .pdf-export {
         display: block;
-        color: #111;
-        font-family: Arial, sans-serif;
-        line-height: 1.35;
+        padding: 22px;
+        border: 1px solid rgba(66, 245, 108, 0.45);
+        background: var(--terminal-bg);
+        color: var(--terminal-green);
+        font-family: inherit;
+        line-height: 1.45;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 
     .pdf-export .command-title,
@@ -744,7 +753,7 @@ body::after {
     .pdf-export .cv-entry h3,
     .pdf-export .project-card h3,
     .pdf-export .stat-card .value {
-        color: #111;
+        color: var(--terminal-yellow);
         text-shadow: none;
     }
 
@@ -755,7 +764,7 @@ body::after {
     .pdf-export .cv-entry .projects-list li::before,
     .pdf-export .project-card .tech-stack span::before,
     .pdf-export .project-card .tech-stack span::after {
-        color: #555;
+        color: var(--terminal-green-dim);
     }
 
     .pdf-export .command-output,
@@ -764,7 +773,7 @@ body::after {
     .pdf-export .date,
     .pdf-export .stat-card .label,
     .pdf-export .cert-meta {
-        color: #222;
+        color: var(--terminal-muted);
     }
 
     .pdf-export .command-success,
@@ -772,12 +781,25 @@ body::after {
     .pdf-export .bio-stage,
     .pdf-export .skill-link,
     .pdf-export .cert-link {
-        color: #0645ad;
+        color: var(--terminal-cyan);
+    }
+
+    .pdf-export .contact-link {
+        color: var(--terminal-cyan);
+    }
+
+    .pdf-export .cv-entry,
+    .pdf-export .project-card,
+    .pdf-export .cert-list li,
+    .pdf-export .stat-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
     }
 
     .pdf-export .terminal-action,
     .pdf-export .pdf-actions,
-    .pdf-actions {
+    .pdf-actions,
+    .pdf-instructions {
         display: none !important;
     }
 
@@ -788,7 +810,7 @@ body::after {
 
     .pdf-subtitle {
         margin-bottom: 18px;
-        color: #444;
+        color: var(--terminal-muted);
         font-size: 13px;
     }
 }

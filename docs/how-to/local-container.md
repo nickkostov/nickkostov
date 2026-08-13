@@ -46,4 +46,4 @@ The test command builds and starts the Compose service, waits for the site, test
 
 Press Tab after a partial command or alias. One match completes in the input; multiple matches are printed above the active prompt. Examples include `abo` to `about` and `cat r` to `cat resume`.
 
-Available aliases are shown by `help`: `ls`, `whoami`, and `cat resume`. The `cv` command includes work history and the resume download. Use `pdf` or the **PDF** navigation button to build a printable CV, then choose **Save as PDF** in the browser print dialog.
+Available aliases are shown by `help`: `ls`, `whoami`, and `cat resume`. The `cv` command includes work history and the resume download. Use `pdf` or the **PDF** navigation button to build a printable CV, then choose **Save as PDF** in the browser print dialog. Enable **Background graphics** in the dialog if the saved PDF should retain the dark terminal background and colors.

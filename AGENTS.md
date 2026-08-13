@@ -55,6 +55,7 @@ Important content rules:
 - Darbi College Sofia is the completed education. HAN University of Applied Sciences represents one year of Biomedical Sciences study, not a completed degree.
 - Certification records require `name` and an HTTPS `credentialUrl`; `credentialId` and `status` are optional.
 - Keep `stats.certifications` equal to the number of certification records.
+- CV `projects` lists are optional for jobs without project details.
 - Contact email and phone are public in the downloaded JSON even though the UI masks them behind a lightweight arithmetic check. Do not describe this client-side control as bot-proof protection.
 
 ## Commands and navigation

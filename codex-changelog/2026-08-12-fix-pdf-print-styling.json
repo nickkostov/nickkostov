@@ -1,0 +1,13 @@
+{
+  "date": "2026-08-12",
+  "task": "Restore CV styling when saving the browser-generated PDF",
+  "changes": [
+    "Preserved the terminal background, palette, monospace typography, borders, and spacing in print CSS.",
+    "Kept terminal chrome and print controls out of the saved document.",
+    "Added user guidance to enable browser Background graphics when saving the dark background."
+  ],
+  "validation": [
+    "44 Playwright smoke tests passed",
+    "JavaScript syntax, JSON, and diff whitespace checks passed"
+  ]
+}
