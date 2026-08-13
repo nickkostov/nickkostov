@@ -1,0 +1,9 @@
+{
+  "date": "2026-08-13",
+  "task": "Add an under-construction banner",
+  "changes": [
+    "Added a visible status banner below the navigation.",
+    "Styled the banner with the existing terminal palette and responsive wrapping.",
+    "Added a Playwright assertion for its accessible status role and message."
+  ]
+}

@@ -5,7 +5,7 @@ Interactive browser-based digital CV that behaves and reads like an actual termi
 Static HTML, CSS, and vanilla JavaScript served by Nginx in Docker. CV data is loaded from `content/content.json`; resume asset is `resume/resume.pdf`. Compose publishes port 8090 by default with `CV_PORT` override support. GitHub Actions deploys a minimal static artifact to GitHub Pages.
 
 # Files
-`index.html` is the shell. `javascript.js` owns schema validation, registry-driven terminal/navbar navigation, aliases, completion, history, rendering, and resume link; CV facts live only in `content/content.json`. `style.css` provides the terminal theme. `Dockerfile` and `compose.yaml` serve locally; `.github/workflows/pages.yml` deploys runtime files from `master`. Playwright smoke tests live in `tests/`; `docs/` documents operation.
+`index.html` is the shell and includes the accessible under-construction status banner. `javascript.js` owns schema validation, registry-driven terminal/navbar navigation, aliases, completion, history, rendering, and resume link; CV facts live only in `content/content.json`. `style.css` provides the terminal theme. `Dockerfile` and `compose.yaml` serve locally; `.github/workflows/pages.yml` deploys runtime files from `master`. Playwright smoke tests live in `tests/`; `docs/` documents operation.
 
 # Rules
 Prefix every shell command with `rtk`. Log commands in `cmd-log/`. Save prompts and outputs in `codex-changelog/`. Keep reviews read-only unless implementation is requested. Keep documentation under `docs/` when documentation is added.

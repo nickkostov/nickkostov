@@ -38,10 +38,12 @@ test('starts with a focused terminal prompt', async ({ page }) => {
 
     await expect(page).toHaveTitle('Nikolay Kostov - Digital CV');
     expect(response.headers()['cache-control']).toContain('no-store');
-    await expect(page.locator('#buildVersion')).toHaveText('build: cp9-aws-link-20260812');
+    await expect(page.locator('#buildVersion')).toHaveText('build: cp10-under-construction-20260813');
     await expect(page.locator('#startupBanner')).toContainText('nickkostov.bg');
     await expect(page.locator('#startupBanner')).toContainText(cvContent.about.name);
     await expect(page.locator('#startupBanner')).toContainText(cvContent.about.title);
+    await expect(page.locator('.construction-banner')).toHaveRole('status');
+    await expect(page.locator('.construction-banner')).toContainText('still under construction');
     await expect(page.locator('.terminal-nav-button').first()).toBeEnabled();
 });
 
@@ -201,6 +203,7 @@ test('pdf command builds a printable CV and opens the print dialog', async ({ pa
 
     await page.emulateMedia({ media: 'print' });
     await expect(page.locator('.terminal-header')).toBeHidden();
+    await expect(page.locator('.construction-banner')).toBeHidden();
     await expect(page.locator('.pdf-export')).toBeVisible();
 });
 

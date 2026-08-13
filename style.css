@@ -119,6 +119,24 @@ body::after {
     cursor: wait;
 }
 
+.construction-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 15px;
+    border-bottom: 1px solid rgba(255, 230, 109, 0.55);
+    background: rgba(255, 230, 109, 0.08);
+    color: var(--terminal-yellow);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.construction-banner-icon {
+    flex: 0 0 auto;
+    color: var(--terminal-red);
+    font-weight: 700;
+}
+
 .close { background-color: #ff5f56; }
 .minimize { background-color: #ffbd2e; }
 .maximize { background-color: #27c93f; }
@@ -638,6 +656,11 @@ body::after {
         padding-inline: 8px;
     }
 
+    .construction-banner {
+        align-items: flex-start;
+        padding-inline: 10px;
+    }
+
     .terminal-body {
         padding: 12px 10px;
         font-size: 14px;
@@ -712,6 +735,7 @@ body::after {
     body::after,
     .terminal-header,
     .terminal-nav,
+    .construction-banner,
     .terminal-footer {
         display: none !important;
     }
